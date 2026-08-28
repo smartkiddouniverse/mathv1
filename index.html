@@ -4,490 +4,984 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartKiddo Universe - Math Playground</title>
+    
+    <!-- Premium Google Fonts for modern kid-friendly typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
     <style>
-        /* Modern, clean, and kid-friendly design */
+        /* Cosmic Theme Custom Properties */
         :root {
-            --bg-color: #f0f4f8;
-            --primary-color: #4a90e2;
-            --secondary-color: #ffd15c;
-            --text-color: #333333;
-            --card-bg: #ffffff;
-            --accent-color: #2ecc71;
-            --danger-color: #e74c3c;
+            --space-bg: linear-gradient(135deg, #0b001a 0%, #1a0b36 50%, #030008 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --neon-pink: #ff2a85;
+            --neon-blue: #00f0ff;
+            --neon-purple: #bd00ff;
+            --neon-yellow: #ffdf00;
+            --neon-green: #39ff14;
+            --text-light: #ffffff;
+            --text-muted: #b5a8cb;
+            --accent-gradient: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, .brand, .btn {
+            font-family: 'Fredoka', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background: var(--space-bg);
+            color: var(--text-light);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Top Bar */
+        /* Ambient background floating space dust */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            background-position: 0 0, 40px 60px;
+            opacity: 0.4;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Particle Canvas Layer */
+        #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Top Header Nav */
         header {
-            background-color: var(--card-bg);
-            padding: 15px 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background: rgba(11, 0, 26, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            z-index: 10;
+            position: relative;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
 
         .brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
+            font-size: 26px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            letter-spacing: 0.5px;
         }
 
-        .user-greeting {
-            font-size: 16px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        .top-controls {
+        .gamification-status {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        /* Language Switcher Button Style */
-        .lang-selector select {
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 2px solid var(--primary-color);
-            background-color: white;
+        /* Gamified Avatar & Progress Bar */
+        .profile-capsule {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .avatar {
+            font-size: 22px;
+            background: rgba(255,255,255,0.1);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--neon-blue);
+        }
+
+        .xp-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .xp-label {
+            font-size: 11px;
+            color: var(--text-muted);
             font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .xp-bar-bg {
+            width: 100px;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            box-shadow: 0 0 10px var(--neon-blue);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* UI Selectors & Language controls */
+        .lang-dropdown {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            color: white;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
             outline: none;
+            transition: border-color 0.3s;
         }
 
-        .reset-btn {
-            background-color: transparent;
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-            padding: 5px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
+        .lang-dropdown:hover {
+            border-color: var(--neon-blue);
         }
 
-        .reset-btn:hover {
-            background-color: var(--danger-color);
+        .lang-dropdown option {
+            background-color: #1a0b36;
             color: white;
         }
 
-        /* Main container styling */
+        .reset-link {
+            color: #ff5e97;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 94, 151, 0.2);
+            padding: 5px 12px;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .reset-link:hover {
+            background: rgba(255, 94, 151, 0.1);
+            border-color: #ff5e97;
+        }
+
+        /* Main Workspace */
         main {
             flex: 1;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            padding: 40px;
-            max-width: 600px;
+        /* Glass Container Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 45px 40px;
             width: 100%;
+            max-width: 650px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
             text-align: center;
-            transition: transform 0.3s ease;
+            position: relative;
         }
 
-        h2 {
-            margin-bottom: 25px;
-            color: #444;
-            font-size: 28px;
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(135deg, var(--glass-border), transparent, var(--glass-border));
+            border-radius: 32px;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* Views (Onboarding, Year Selector, Topic Selector) */
+        /* Views state machine styling */
         .view {
             display: none;
         }
 
         .view.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: cardEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
-        /* Onboarding Form */
+        /* Card titles */
+        h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        /* Interactive Form Elements */
         .form-group {
-            margin-bottom: 20px;
             text-align: left;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            opacity: 0.7;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 18px;
-            border-radius: 12px;
-            border: 2px solid #ddd;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 14px 20px 14px 48px;
+            color: white;
             font-size: 16px;
+            font-weight: 600;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s;
         }
 
         .form-group input:focus {
-            border-color: var(--primary-color);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 42, 133, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        /* Interactive Grid Layouts */
-        .grid {
+        /* Cosmic Button Base Style */
+        .btn {
+            background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-purple) 100%);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 16px 28px;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 6px 20px rgba(255, 42, 133, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 42, 133, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Visual Interactive Grids */
+        .cosmic-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            gap: 16px;
+            margin-top: 25px;
         }
 
-        @media (max-width: 480px) {
-            .grid {
+        @media (max-width: 500px) {
+            .cosmic-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* Buttons */
-        .btn {
-            background-color: var(--primary-color);
+        /* Year Buttons Styling */
+        .btn-year {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid var(--glass-border);
             color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 16px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 22px 15px;
+            border-radius: 20px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        .btn-year .icon {
+            font-size: 32px;
+            transition: transform 0.3s;
         }
 
-        .btn:active {
-            transform: translateY(0);
+        .btn-year:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            background: rgba(0, 240, 255, 0.05);
+            transform: translateY(-5px);
         }
 
-        /* Colors for different topics to make it playful */
-        .btn-tambah { background-color: #3498db; }
-        .btn-tolak { background-color: #e67e22; }
-        .btn-darab { background-color: #9b59b6; }
-        .btn-bahagi { background-color: #1abc9c; }
-        .btn-sifir { background-color: #f1c40f; color: #333; }
-
-        .btn-submit {
-            background-color: var(--accent-color);
-            width: 100%;
-            margin-top: 10px;
+        .btn-year:hover .icon {
+            transform: scale(1.2) rotate(10deg);
         }
 
-        .btn-back {
-            background-color: #95a5a6;
-            margin-top: 25px;
-            padding: 10px 20px;
-            font-size: 14px;
+        /* Interactive Topic Selector Badges */
+        .btn-topic {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px dashed var(--glass-border);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .btn-topic .topic-icon-frame {
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: transform 0.3s;
         }
 
+        /* Color configurations for math modules */
+        .theme-tambah { border-color: #ff2a85; }
+        .theme-tambah .topic-icon-frame { background: rgba(255, 42, 133, 0.15); color: #ff2a85; }
+        .theme-tambah:hover { background: rgba(255, 42, 133, 0.1); border-color: #ff2a85; box-shadow: 0 0 15px rgba(255, 42, 133, 0.3); }
+
+        .theme-tolak { border-color: #00f0ff; }
+        .theme-tolak .topic-icon-frame { background: rgba(0, 240, 255, 0.15); color: #00f0ff; }
+        .theme-tolak:hover { background: rgba(0, 240, 255, 0.1); border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
+
+        .theme-darab { border-color: #bd00ff; }
+        .theme-darab .topic-icon-frame { background: rgba(189, 0, 255, 0.15); color: #bd00ff; }
+        .theme-darab:hover { background: rgba(189, 0, 255, 0.1); border-color: #bd00ff; box-shadow: 0 0 15px rgba(189, 0, 255, 0.3); }
+
+        .theme-bahagi { border-color: #39ff14; }
+        .theme-bahagi .topic-icon-frame { background: rgba(57, 255, 20, 0.15); color: #39ff14; }
+        .theme-bahagi:hover { background: rgba(57, 255, 20, 0.1); border-color: #39ff14; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
+
+        .theme-sifir { border-color: #ffdf00; }
+        .theme-sifir .topic-icon-frame { background: rgba(255, 223, 0, 0.15); color: #ffdf00; }
+        .theme-sifir:hover { background: rgba(255, 223, 0, 0.1); border-color: #ffdf00; box-shadow: 0 0 15px rgba(255, 223, 0, 0.3); }
+
+        .btn-topic:hover .topic-icon-frame {
+            transform: scale(1.15) rotate(-5deg);
+        }
+
+        .btn-navigation {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 30px;
+            width: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: none;
+            transition: all 0.3s;
+        }
+
+        .btn-navigation:hover {
+            color: white;
+            border-color: white;
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.03);
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Particle engine container -->
+    <canvas id="confetti-canvas"></canvas>
+
     <!-- Header Section -->
     <header>
-        <div class="brand">SmartKiddo Universe</div>
-        <div class="top-controls">
-            <span id="user-display" class="user-greeting"></span>
-            
-            <!-- Language Switcher -->
-            <div class="lang-selector">
-                <select id="lang-select" onchange="changeLanguage(this.value)">
-                    <option value="en">English</option>
-                    <option value="my">Bahasa Melayu</option>
-                    <option value="zh">中文</option>
-                </select>
+        <div class="brand-container">
+            <span class="brand">SmartKiddo Universe</span>
+        </div>
+        
+        <div class="gamification-status">
+            <!-- Custom UI State Panel (shows user name and current calculated XP) -->
+            <div class="profile-capsule" id="profile-capsule" style="display: none;">
+                <div class="avatar" id="avatar-emoji">🚀</div>
+                <div class="xp-container">
+                    <span id="header-user" class="xp-label">Hi, Kiddo!</span>
+                    <div class="xp-bar-bg">
+                        <div class="xp-bar-fill" id="xp-bar-fill"></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Reset Profile Option -->
-            <button id="reset-profile-btn" class="reset-btn" onclick="resetProfile()" style="display: none;">Reset</button>
+            <!-- Dynamic Multi-language controller -->
+            <select id="lang-select" class="lang-dropdown" onchange="App.changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="my">Bahasa Melayu</option>
+                <option value="zh">中文</option>
+            </select>
+
+            <a id="reset-profile-btn" class="reset-link" onclick="App.resetProfile()" style="display: none;">Reset</a>
         </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Interactive Workspaces -->
     <main>
-        <!-- Onboarding View -->
-        <div id="onboarding-view" class="card view">
-            <h2 id="onboard-title">Welcome to Math Playground!</h2>
-            <div class="form-group">
-                <label id="label-name" for="username">Your Name</label>
-                <input type="text" id="username" placeholder="Type your name here...">
+        <div class="glass-card">
+            
+            <!-- Onboarding Module -->
+            <div id="onboarding-view" class="view">
+                <h2 id="onboard-title">Enter the Orbit!</h2>
+                <p id="onboard-subtitle" class="subtitle">Prepare for your math journey across the cosmos.</p>
+                
+                <div class="form-group">
+                    <label id="label-name" for="username">Your Space Name</label>
+                    <div class="input-wrapper">
+                        <span class="icon">🧑‍🚀</span>
+                        <input type="text" id="username" autocomplete="off" placeholder="E.g., Captain Star">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label id="label-age" for="userage">Your Age</label>
+                    <div class="input-wrapper">
+                        <span class="icon">🎂</span>
+                        <input type="number" id="userage" min="4" max="18" placeholder="E.g., 8">
+                    </div>
+                </div>
+                <button class="btn" id="btn-start" onclick="App.saveProfile()">Launch Game</button>
             </div>
-            <div class="form-group">
-                <label id="label-age" for="userage">Your Age</label>
-                <input type="number" id="userage" placeholder="Type your age here..." min="4" max="18">
-            </div>
-            <button class="btn btn-submit" id="btn-start" onclick="saveProfile()">Let's Play!</button>
-        </div>
 
-        <!-- Year/Grade Selection View -->
-        <div id="year-view" class="card view">
-            <h2 id="year-title">Select Your Year</h2>
-            <div class="grid">
-                <button class="btn" onclick="selectYear(1)"><span class="year-prefix">Year</span> 1</button>
-                <button class="btn" onclick="selectYear(2)"><span class="year-prefix">Year</span> 2</button>
-                <button class="btn" onclick="selectYear(3)"><span class="year-prefix">Year</span> 3</button>
-                <button class="btn" onclick="selectYear(4)"><span class="year-prefix">Year</span> 4</button>
-                <button class="btn" onclick="selectYear(5)"><span class="year-prefix">Year</span> 5</button>
-                <button class="btn" onclick="selectYear(6)"><span class="year-prefix">Year</span> 6</button>
+            <!-- Year/Grade Module -->
+            <div id="year-view" class="view">
+                <h2 id="year-title">Select Your Level</h2>
+                <p id="year-subtitle" class="subtitle">Choose a star system suitable for your level.</p>
+                <div class="cosmic-grid">
+                    <button class="btn-year" onclick="App.selectYear(1)" onmouseenter="AudioEngine.playHover()"><span class="icon">🪐</span><span class="label-wrapper"><span class="year-prefix">Year</span> 1</span></button>
+                    <button class="btn-year" onclick="App.selectYear(2)" onmouseenter="AudioEngine.playHover()"><span class="icon">🌍</span><span class="label-wrapper"><span class="year-prefix">Year</span> 2</span></button>
+                    <button class="btn-year" onclick="App.selectYear(3)" onmouseenter="AudioEngine.playHover()"><span class="icon">☄️</span><span class="label-wrapper"><span class="year-prefix">Year</span> 3</span></button>
+                    <button class="btn-year" onclick="App.selectYear(4)" onmouseenter="AudioEngine.playHover()"><span class="icon">🌕</span><span class="label-wrapper"><span class="year-prefix">Year</span> 4</span></button>
+                    <button class="btn-year" onclick="App.selectYear(5)" onmouseenter="AudioEngine.playHover()"><span class="icon">⭐️</span><span class="label-wrapper"><span class="year-prefix">Year</span> 5</span></button>
+                    <button class="btn-year" onclick="App.selectYear(6)" onmouseenter="AudioEngine.playHover()"><span class="icon">🌌</span><span class="label-wrapper"><span class="year-prefix">Year</span> 6</span></button>
+                </div>
             </div>
-        </div>
 
-        <!-- Topic Selection View -->
-        <div id="topic-view" class="card view">
-            <h2 id="topic-title">Select a Topic</h2>
-            <div class="grid">
-                <button class="btn btn-tambah" id="btn-tambah" onclick="startMath('tambah')">Tambah</button>
-                <button class="btn btn-tolak" id="btn-tolak" onclick="startMath('tolak')">Tolak</button>
-                <button class="btn btn-darab" id="btn-darab" onclick="startMath('darab')">Darab</button>
-                <button class="btn btn-bahagi" id="btn-bahagi" onclick="startMath('bahagi')">Bahagi</button>
-                <button class="btn btn-sifir" id="btn-sifir" onclick="startMath('sifir')">Sifir</button>
+            <!-- Topics Dashboard -->
+            <div id="topic-view" class="view">
+                <h2 id="topic-title">Choose Your Mission</h2>
+                <p id="topic-subtitle" class="subtitle">Ready to unlock incredible challenges?</p>
+                <div class="cosmic-grid">
+                    <button class="btn-topic theme-tambah" onclick="App.startMath('tambah')" onmouseenter="AudioEngine.playHover()">
+                        <div class="topic-icon-frame">➕</div>
+                        <span id="btn-tambah">Tambah</span>
+                    </button>
+                    <button class="btn-topic theme-tolak" onclick="App.startMath('tolak')" onmouseenter="AudioEngine.playHover()">
+                        <div class="topic-icon-frame">➖</div>
+                        <span id="btn-tolak">Tolak</span>
+                    </button>
+                    <button class="btn-topic theme-darab" onclick="App.startMath('darab')" onmouseenter="AudioEngine.playHover()">
+                        <div class="topic-icon-frame">✖️</div>
+                        <span id="btn-darab">Darab</span>
+                    </button>
+                    <button class="btn-topic theme-bahagi" onclick="App.startMath('bahagi')" onmouseenter="AudioEngine.playHover()">
+                        <div class="topic-icon-frame">➗</div>
+                        <span id="btn-bahagi">Bahagi</span>
+                    </button>
+                    <button class="btn-topic theme-sifir" onclick="App.startMath('sifir')" onmouseenter="AudioEngine.playHover()">
+                        <div class="topic-icon-frame">🔢</div>
+                        <span id="btn-sifir">Sifir</span>
+                    </button>
+                </div>
+                <button class="btn btn-navigation" id="btn-back" onclick="App.goBackToYears()">
+                    <span>⬅️</span> <span id="back-txt">Go Back</span>
+                </button>
             </div>
-            <button class="btn btn-back" id="btn-back" onclick="goBackToYears()">Go Back</button>
+
         </div>
     </main>
 
+    <footer>
+        &copy; 2026 SmartKiddo Universe. Designed for cosmic learners.
+    </footer>
+
     <script>
-        // Language Dictionary
+        /**
+         * Web Audio Synthesizer Engine
+         * Programmatically synthesizes vintage game sounds using browser wave oscillators. No assets needed.
+         */
+        const AudioEngine = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            playHover() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.08);
+                
+                gain.gain.setValueAtTime(0.04, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(now + 0.08);
+            },
+            playSuccess() {
+                this.init();
+                const now = this.ctx.currentTime;
+                // Double pulse upbeat sequence
+                const playStep = (freq, delay, dur) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + delay);
+                    gain.gain.setValueAtTime(0.08, now + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + dur);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + delay);
+                    osc.stop(now + delay + dur);
+                };
+                playStep(523.25, 0, 0.1); // C5
+                playStep(659.25, 0.08, 0.1); // E5
+                playStep(783.99, 0.16, 0.2); // G5
+            }
+        };
+
+        /**
+         * Canvas Confetti Particle Engine
+         * Efficient drawing context logic for animations
+         */
+        const ConfettiEngine = {
+            canvas: null,
+            ctx: null,
+            particles: [],
+            active: false,
+            init() {
+                this.canvas = document.getElementById('confetti-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            },
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            },
+            burst() {
+                this.particles = [];
+                this.active = true;
+                const colors = ['#ff2a85', '#00f0ff', '#bd00ff', '#ffdf00', '#39ff14'];
+                for (let i = 0; i < 120; i++) {
+                    this.particles.push({
+                        x: window.innerWidth / 2,
+                        y: window.innerHeight / 2,
+                        vx: (Math.random() - 0.5) * 15,
+                        vy: (Math.random() - 0.7) * 18 - 5,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        size: Math.random() * 8 + 4,
+                        gravity: 0.35,
+                        spin: Math.random() * 360,
+                        spinSpeed: (Math.random() - 0.5) * 10
+                    });
+                }
+                this.loop();
+            },
+            loop() {
+                if (!this.active) return;
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                let alive = false;
+                
+                for (let p of this.particles) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += p.gravity;
+                    p.spin += p.spinSpeed;
+                    
+                    if (p.y < this.canvas.height) {
+                        alive = true;
+                        this.ctx.save();
+                        this.ctx.translate(p.x, p.y);
+                        this.ctx.rotate(p.spin * Math.PI / 180);
+                        this.ctx.fillStyle = p.color;
+                        this.ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                        this.ctx.restore();
+                    }
+                }
+                if (alive) {
+                    requestAnimationFrame(() => this.loop());
+                } else {
+                    this.active = false;
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                }
+            }
+        };
+
+        /**
+         * Dynamic Translation Library
+         */
         const translations = {
             en: {
-                onboardTitle: "Welcome to Math Playground!",
-                labelName: "Your Name",
-                placeholderName: "Type your name here...",
+                onboardTitle: "Enter the Orbit!",
+                onboardSubtitle: "Prepare for your math journey across the cosmos.",
+                labelName: "Your Space Name",
+                placeholderName: "E.g., Captain Astro",
                 labelAge: "Your Age",
-                placeholderAge: "Type your age here...",
-                btnStart: "Let's Play!",
+                placeholderAge: "E.g., 8",
+                btnStart: "Launch Game",
                 greeting: "Hi, {name}!",
-                yearTitle: "Select Your Year",
+                yearTitle: "Select Your Level",
+                yearSubtitle: "Choose a star system suitable for your level.",
                 yearPrefix: "Year",
-                topicTitle: "Select a Topic ({year})",
-                tambah: "Addition",
-                tolak: "Subtraction",
-                darab: "Multiplication",
-                bahagi: "Division",
-                sifir: "Times Tables",
+                topicTitle: "Choose Your Mission",
+                topicSubtitle: "Level {year} • Ready to start your module?",
+                tambah: "Addition (Tambah)",
+                tolak: "Subtraction (Tolak)",
+                darab: "Multiplication (Darab)",
+                bahagi: "Division (Bahagi)",
+                sifir: "Times Tables (Sifir)",
                 btnBack: "Go Back",
-                btnReset: "Reset Profile"
+                btnReset: "Reset",
+                nameAlert: "Please enter your name!",
+                ageAlert: "Please enter a valid age!"
             },
             my: {
-                onboardTitle: "Selamat Datang ke Math Playground!",
-                labelName: "Nama Anda",
-                placeholderName: "Tulis nama anda di sini...",
+                onboardTitle: "Masuk ke Orbit!",
+                onboardSubtitle: "Sediakan diri untuk pengembaraan matematik di angkasa.",
+                labelName: "Nama Angkasa Anda",
+                placeholderName: "Cth: Kapten Bintang",
                 labelAge: "Umur Anda",
-                placeholderAge: "Tulis umur anda di sini...",
-                btnStart: "Jom Main!",
+                placeholderAge: "Cth: 8",
+                btnStart: "Lancar Game",
                 greeting: "Hai, {name}!",
-                yearTitle: "Pilih Tahun Anda",
+                yearTitle: "Pilih Tahap Anda",
+                yearSubtitle: "Pilih sistem bintang yang sesuai untuk tahap anda.",
                 yearPrefix: "Tahun",
-                topicTitle: "Pilih Tajuk ({year})",
+                topicTitle: "Pilih Misi Anda",
+                topicSubtitle: "Tahun {year} • Sedia untuk memulakan modul anda?",
                 tambah: "Tambah",
                 tolak: "Tolak",
                 darab: "Darab",
                 bahagi: "Bahagi",
                 sifir: "Sifir",
                 btnBack: "Kembali",
-                btnReset: "Set Semula Profil"
+                btnReset: "Set Semula",
+                nameAlert: "Sila masukkan nama anda!",
+                ageAlert: "Sila masukkan umur yang sah!"
             },
             zh: {
-                onboardTitle: "欢迎来到数学乐园！",
-                labelName: "您的名字",
-                placeholderName: "在这里输入您的名字...",
+                onboardTitle: "进入太空轨道！",
+                onboardSubtitle: "为你的跨宇宙数学之旅做好准备。",
+                labelName: "您的太空代号",
+                placeholderName: "例如：星际船长",
                 labelAge: "您的年龄",
-                placeholderAge: "在这里输入您的年龄...",
-                btnStart: "开始游戏！",
+                placeholderAge: "例如：8",
+                btnStart: "启动游戏",
                 greeting: "你好，{name}！",
-                yearTitle: "选择你的年级",
+                yearTitle: "选择你的等级",
+                yearSubtitle: "选择适合你水平的星系。",
                 yearPrefix: "年级",
-                topicTitle: "选择主题 ({year})",
+                topicTitle: "选择您的任务",
+                topicSubtitle: "年级 {year} • 准备好开始学习了吗？",
                 tambah: "加法 (Tambah)",
                 tolak: "减法 (Tolak)",
                 darab: "乘法 (Darab)",
                 bahagi: "除法 (Bahagi)",
                 sifir: "乘法表 (Sifir)",
                 btnBack: "返回",
-                btnReset: "重置个人资料"
+                btnReset: "重置",
+                nameAlert: "请输入您的名字！",
+                ageAlert: "请输入正确的年龄！"
             }
         };
 
-        // App State
-        let currentLang = 'en';
-        let selectedYear = null;
+        /**
+         * Modular App Logic Controller
+         */
+        const App = {
+            lang: 'en',
+            selectedYear: null,
+            userProfile: { name: '', age: 8, xp: 0 },
 
-        // Initialize App
-        window.onload = function() {
-            // Load language from storage or default to English
-            const storedLang = localStorage.getItem('smartkiddo_lang');
-            if (storedLang) {
-                currentLang = storedLang;
-                document.getElementById('lang-select').value = currentLang;
+            init() {
+                ConfettiEngine.init();
+                
+                // Read configurations from Storage
+                const storedLang = localStorage.getItem('smartkiddo_lang');
+                if (storedLang) {
+                    this.lang = storedLang;
+                    document.getElementById('lang-select').value = this.lang;
+                }
+
+                this.loadProfile();
+            },
+
+            loadProfile() {
+                const name = localStorage.getItem('smartkiddo_name');
+                const age = localStorage.getItem('smartkiddo_age');
+                const xp = parseInt(localStorage.getItem('smartkiddo_xp')) || 25; // Default XP starting value
+
+                if (name && age) {
+                    this.userProfile = { name, age, xp };
+                    document.getElementById('reset-profile-btn').style.display = 'inline-block';
+                    document.getElementById('profile-capsule').style.display = 'flex';
+                    this.updateGamificationUI();
+                    this.showView('year-view');
+                } else {
+                    document.getElementById('reset-profile-btn').style.display = 'none';
+                    document.getElementById('profile-capsule').style.display = 'none';
+                    this.showView('onboarding-view');
+                }
+                this.applyLanguage();
+            },
+
+            saveProfile() {
+                const nameInput = document.getElementById('username').value.trim();
+                const ageInput = parseInt(document.getElementById('userage').value);
+
+                if (!nameInput) {
+                    alert(translations[this.lang].nameAlert);
+                    return;
+                }
+                if (!ageInput || ageInput < 3 || ageInput > 18) {
+                    alert(translations[this.lang].ageAlert);
+                    return;
+                }
+
+                localStorage.setItem('smartkiddo_name', nameInput);
+                localStorage.setItem('smartkiddo_age', ageInput);
+                localStorage.setItem('smartkiddo_xp', 35); // Initial XP boost
+
+                AudioEngine.playSuccess();
+                ConfettiEngine.burst();
+
+                // Small delay to let animations complete before views shift
+                setTimeout(() => {
+                    this.loadProfile();
+                }, 800);
+            },
+
+            resetProfile() {
+                const confirmMsg = this.lang === 'zh' ? '确定要重置您的太空档案吗？' : this.lang === 'my' ? 'Adakah anda mahu memadam profil angkasa anda?' : 'Are you sure you want to reset your space profile?';
+                if (confirm(confirmMsg)) {
+                    localStorage.removeItem('smartkiddo_name');
+                    localStorage.removeItem('smartkiddo_age');
+                    localStorage.removeItem('smartkiddo_xp');
+                    document.getElementById('username').value = "";
+                    document.getElementById('userage').value = "";
+                    this.selectedYear = null;
+                    this.loadProfile();
+                }
+            },
+
+            updateGamificationUI() {
+                // Displays names and computes level bar fills based on XP properties
+                const temp = translations[this.lang].greeting;
+                document.getElementById('header-user').textContent = temp.replace('{name}', this.userProfile.name);
+                
+                // Animate avatar emoji relative to age input values
+                const emoji = this.userProfile.age >= 10 ? '👾' : '🚀';
+                document.getElementById('avatar-emoji').textContent = emoji;
+
+                // Simple simulated level meter
+                const barFill = document.getElementById('xp-bar-fill');
+                setTimeout(() => {
+                    barFill.style.width = `${Math.min(this.userProfile.xp, 100)}%`;
+                }, 200);
+            },
+
+            showView(viewId) {
+                const views = document.querySelectorAll('.view');
+                views.forEach(v => v.classList.remove('active'));
+                const target = document.getElementById(viewId);
+                if (target) target.classList.add('active');
+            },
+
+            selectYear(year) {
+                AudioEngine.playSuccess();
+                this.selectedYear = year;
+                this.showView('topic-view');
+                this.applyLanguage();
+            },
+
+            goBackToYears() {
+                AudioEngine.playHover();
+                this.selectedYear = null;
+                this.showView('year-view');
+            },
+
+            startMath(topic) {
+                AudioEngine.playSuccess();
+                ConfettiEngine.burst();
+                
+                // Add XP points upon completing a choice selection
+                let currentXP = parseInt(localStorage.getItem('smartkiddo_xp')) || 35;
+                currentXP = Math.min(currentXP + 15, 100);
+                localStorage.setItem('smartkiddo_xp', currentXP);
+                this.userProfile.xp = currentXP;
+                this.updateGamificationUI();
+
+                alert(`Mission Configured!\nLoading Interactive Game: ${topic.toUpperCase()} (Year ${this.selectedYear})`);
+            },
+
+            changeLanguage(lang) {
+                AudioEngine.playHover();
+                this.lang = lang;
+                localStorage.setItem('smartkiddo_lang', lang);
+                this.loadProfile();
+            },
+
+            applyLanguage() {
+                const dict = translations[this.lang];
+
+                // Onboarding Inputs
+                document.getElementById('onboard-title').textContent = dict.onboardTitle;
+                document.getElementById('onboard-subtitle').textContent = dict.onboardSubtitle;
+                document.getElementById('label-name').textContent = dict.labelName;
+                document.getElementById('username').placeholder = dict.placeholderName;
+                document.getElementById('label-age').textContent = dict.labelAge;
+                document.getElementById('userage').placeholder = dict.placeholderAge;
+                document.getElementById('btn-start').textContent = dict.btnStart;
+
+                // Levels View Titles
+                document.getElementById('year-title').textContent = dict.yearTitle;
+                document.getElementById('year-subtitle').textContent = dict.yearSubtitle;
+                document.querySelectorAll('.year-prefix').forEach(elem => {
+                    elem.textContent = dict.yearPrefix;
+                });
+
+                // Topics Dashboard Labels
+                if (this.selectedYear) {
+                    document.getElementById('topic-title').textContent = dict.topicTitle;
+                    document.getElementById('topic-subtitle').textContent = dict.topicSubtitle.replace('{year}', this.selectedYear);
+                }
+                document.getElementById('btn-tambah').textContent = dict.tambah;
+                document.getElementById('btn-tolak').textContent = dict.tolak;
+                document.getElementById('btn-darab').textContent = dict.darab;
+                document.getElementById('btn-bahagi').textContent = dict.bahagi;
+                document.getElementById('btn-sifir').textContent = dict.sifir;
+                document.getElementById('back-txt').textContent = dict.btnBack;
+
+                // Top resets label
+                document.getElementById('reset-profile-btn').textContent = dict.btnReset;
             }
-
-            checkProfile();
         };
 
-        // Check if user profile exists in LocalStorage
-        function checkProfile() {
-            const name = localStorage.getItem('smartkiddo_name');
-            const age = localStorage.getItem('smartkiddo_age');
-
-            if (name && age) {
-                // Profile exists, show year selection view
-                updateGreeting(name);
-                document.getElementById('reset-profile-btn').style.display = "inline-block";
-                showView('year-view');
-            } else {
-                // No profile found, show onboarding view
-                document.getElementById('user-display').textContent = "";
-                document.getElementById('reset-profile-btn').style.display = "none";
-                showView('onboarding-view');
-            }
-            applyLanguage();
-        }
-
-        // Save profile to LocalStorage
-        function saveProfile() {
-            const nameInput = document.getElementById('username').value.trim();
-            const ageInput = document.getElementById('userage').value.trim();
-
-            if (!nameInput || !ageInput) {
-                alert(currentLang === 'zh' ? '请输入名字和年龄！' : currentLang === 'my' ? 'Sila masukkan nama dan umur anda!' : 'Please enter your name and age!');
-                return;
-            }
-
-            localStorage.setItem('smartkiddo_name', nameInput);
-            localStorage.setItem('smartkiddo_age', ageInput);
-
-            checkProfile();
-        }
-
-        // Reset Profile data
-        function resetProfile() {
-            if (confirm(currentLang === 'zh' ? '确认要重置个人资料吗？' : currentLang === 'my' ? 'Adakah anda mahu set semula profil?' : 'Are you sure you want to reset your profile?')) {
-                localStorage.removeItem('smartkiddo_name');
-                localStorage.removeItem('smartkiddo_age');
-                document.getElementById('username').value = "";
-                document.getElementById('userage').value = "";
-                selectedYear = null;
-                checkProfile();
-            }
-        }
-
-        // Navigation between "Views"
-        function showView(viewId) {
-            // Hide all views
-            const views = document.querySelectorAll('.view');
-            views.forEach(view => view.classList.remove('active'));
-
-            // Show selected view
-            const activeView = document.getElementById(viewId);
-            if (activeView) {
-                activeView.classList.add('active');
-            }
-        }
-
-        // Year Selected handler
-        function selectYear(year) {
-            selectedYear = year;
-            showView('topic-view');
-            applyLanguage();
-        }
-
-        function goBackToYears() {
-            selectedYear = null;
-            showView('year-view');
-        }
-
-        // Topic selected handler
-        function startMath(topic) {
-            const name = localStorage.getItem('smartkiddo_name');
-            alert(`Ready to learn! Play ${topic.toUpperCase()} for Year ${selectedYear}, ${name}!`);
-            // You can replace this alert with code to load your interactive math games here.
-        }
-
-        // Update greeting on top
-        function updateGreeting(name) {
-            const template = translations[currentLang].greeting;
-            document.getElementById('user-display').textContent = template.replace('{name}', name);
-        }
-
-        // Language Switcher Function
-        function changeLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('smartkiddo_lang', lang);
-            
-            const name = localStorage.getItem('smartkiddo_name');
-            if (name) {
-                updateGreeting(name);
-            }
-            applyLanguage();
-        }
-
-        // Apply translations dynamically to the DOM elements
-        function applyLanguage() {
-            const langData = translations[currentLang];
-
-            // Onboarding View Elements
-            document.getElementById('onboard-title').textContent = langData.onboardTitle;
-            document.getElementById('label-name').textContent = langData.labelName;
-            document.getElementById('username').placeholder = langData.placeholderName;
-            document.getElementById('label-age').textContent = langData.labelAge;
-            document.getElementById('userage').placeholder = langData.placeholderAge;
-            document.getElementById('btn-start').textContent = langData.btnStart;
-
-            // Year View Elements
-            document.getElementById('year-title').textContent = langData.yearTitle;
-            const prefixes = document.querySelectorAll('.year-prefix');
-            prefixes.forEach(prefix => prefix.textContent = langData.yearPrefix);
-
-            // Topic View Elements
-            if (selectedYear) {
-                const yearPrefix = langData.yearPrefix + " " + selectedYear;
-                document.getElementById('topic-title').textContent = langData.topicTitle.replace('{year}', yearPrefix);
-            }
-            document.getElementById('btn-tambah').textContent = langData.tambah;
-            document.getElementById('btn-tolak').textContent = langData.tolak;
-            document.getElementById('btn-darab').textContent = langData.darab;
-            document.getElementById('btn-bahagi').textContent = langData.bahagi;
-            document.getElementById('btn-sifir').textContent = langData.sifir;
-            document.getElementById('btn-back').textContent = langData.btnBack;
-
-            // Reset Button Element
-            document.getElementById('reset-profile-btn').textContent = langData.btnReset;
-        }
+        // Initialize App on load
+        window.addEventListener('DOMContentLoaded', () => App.init());
     </script>
 </body>
 </html>
