@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartKiddo Universe - Math Playground</title>
+    <style>
+        /* Modern, clean, and kid-friendly design */
+        :root {
+            --bg-color: #f0f4f8;
+            --primary-color: #4a90e2;
+            --secondary-color: #ffd15c;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --accent-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        header {
+            background-color: var(--card-bg);
+            padding: 15px 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .user-greeting {
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Language Switcher Button Style */
+        .lang-selector select {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 2px solid var(--primary-color);
+            background-color: white;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .reset-btn {
+            background-color: transparent;
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Main container styling */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #444;
+            font-size: 28px;
+        }
+
+        /* Views (Onboarding, Year Selector, Topic Selector) */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Onboarding Form */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Interactive Grid Layouts */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Colors for different topics to make it playful */
+        .btn-tambah { background-color: #3498db; }
+        .btn-tolak { background-color: #e67e22; }
+        .btn-darab { background-color: #9b59b6; }
+        .btn-bahagi { background-color: #1abc9c; }
+        .btn-sifir { background-color: #f1c40f; color: #333; }
+
+        .btn-submit {
+            background-color: var(--accent-color);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-back {
+            background-color: #95a5a6;
+            margin-top: 25px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="brand">SmartKiddo Universe</div>
+        <div class="top-controls">
+            <span id="user-display" class="user-greeting"></span>
+            
+            <!-- Language Switcher -->
+            <div class="lang-selector">
+                <select id="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="my">Bahasa Melayu</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
+
+            <!-- Reset Profile Option -->
+            <button id="reset-profile-btn" class="reset-btn" onclick="resetProfile()" style="display: none;">Reset</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Onboarding View -->
+        <div id="onboarding-view" class="card view">
+            <h2 id="onboard-title">Welcome to Math Playground!</h2>
+            <div class="form-group">
+                <label id="label-name" for="username">Your Name</label>
+                <input type="text" id="username" placeholder="Type your name here...">
+            </div>
+            <div class="form-group">
+                <label id="label-age" for="userage">Your Age</label>
+                <input type="number" id="userage" placeholder="Type your age here..." min="4" max="18">
+            </div>
+            <button class="btn btn-submit" id="btn-start" onclick="saveProfile()">Let's Play!</button>
+        </div>
+
+        <!-- Year/Grade Selection View -->
+        <div id="year-view" class="card view">
+            <h2 id="year-title">Select Your Year</h2>
+            <div class="grid">
+                <button class="btn" onclick="selectYear(1)"><span class="year-prefix">Year</span> 1</button>
+                <button class="btn" onclick="selectYear(2)"><span class="year-prefix">Year</span> 2</button>
+                <button class="btn" onclick="selectYear(3)"><span class="year-prefix">Year</span> 3</button>
+                <button class="btn" onclick="selectYear(4)"><span class="year-prefix">Year</span> 4</button>
+                <button class="btn" onclick="selectYear(5)"><span class="year-prefix">Year</span> 5</button>
+                <button class="btn" onclick="selectYear(6)"><span class="year-prefix">Year</span> 6</button>
+            </div>
+        </div>
+
+        <!-- Topic Selection View -->
+        <div id="topic-view" class="card view">
+            <h2 id="topic-title">Select a Topic</h2>
+            <div class="grid">
+                <button class="btn btn-tambah" id="btn-tambah" onclick="startMath('tambah')">Tambah</button>
+                <button class="btn btn-tolak" id="btn-tolak" onclick="startMath('tolak')">Tolak</button>
+                <button class="btn btn-darab" id="btn-darab" onclick="startMath('darab')">Darab</button>
+                <button class="btn btn-bahagi" id="btn-bahagi" onclick="startMath('bahagi')">Bahagi</button>
+                <button class="btn btn-sifir" id="btn-sifir" onclick="startMath('sifir')">Sifir</button>
+            </div>
+            <button class="btn btn-back" id="btn-back" onclick="goBackToYears()">Go Back</button>
+        </div>
+    </main>
+
+    <script>
+        // Language Dictionary
+        const translations = {
+            en: {
+                onboardTitle: "Welcome to Math Playground!",
+                labelName: "Your Name",
+                placeholderName: "Type your name here...",
+                labelAge: "Your Age",
+                placeholderAge: "Type your age here...",
+                btnStart: "Let's Play!",
+                greeting: "Hi, {name}!",
+                yearTitle: "Select Your Year",
+                yearPrefix: "Year",
+                topicTitle: "Select a Topic ({year})",
+                tambah: "Addition",
+                tolak: "Subtraction",
+                darab: "Multiplication",
+                bahagi: "Division",
+                sifir: "Times Tables",
+                btnBack: "Go Back",
+                btnReset: "Reset Profile"
+            },
+            my: {
+                onboardTitle: "Selamat Datang ke Math Playground!",
+                labelName: "Nama Anda",
+                placeholderName: "Tulis nama anda di sini...",
+                labelAge: "Umur Anda",
+                placeholderAge: "Tulis umur anda di sini...",
+                btnStart: "Jom Main!",
+                greeting: "Hai, {name}!",
+                yearTitle: "Pilih Tahun Anda",
+                yearPrefix: "Tahun",
+                topicTitle: "Pilih Tajuk ({year})",
+                tambah: "Tambah",
+                tolak: "Tolak",
+                darab: "Darab",
+                bahagi: "Bahagi",
+                sifir: "Sifir",
+                btnBack: "Kembali",
+                btnReset: "Set Semula Profil"
+            },
+            zh: {
+                onboardTitle: "欢迎来到数学乐园！",
+                labelName: "您的名字",
+                placeholderName: "在这里输入您的名字...",
+                labelAge: "您的年龄",
+                placeholderAge: "在这里输入您的年龄...",
+                btnStart: "开始游戏！",
+                greeting: "你好，{name}！",
+                yearTitle: "选择你的年级",
+                yearPrefix: "年级",
+                topicTitle: "选择主题 ({year})",
+                tambah: "加法 (Tambah)",
+                tolak: "减法 (Tolak)",
+                darab: "乘法 (Darab)",
+                bahagi: "除法 (Bahagi)",
+                sifir: "乘法表 (Sifir)",
+                btnBack: "返回",
+                btnReset: "重置个人资料"
+            }
+        };
+
+        // App State
+        let currentLang = 'en';
+        let selectedYear = null;
+
+        // Initialize App
+        window.onload = function() {
+            // Load language from storage or default to English
+            const storedLang = localStorage.getItem('smartkiddo_lang');
+            if (storedLang) {
+                currentLang = storedLang;
+                document.getElementById('lang-select').value = currentLang;
+            }
+
+            checkProfile();
+        };
+
+        // Check if user profile exists in LocalStorage
+        function checkProfile() {
+            const name = localStorage.getItem('smartkiddo_name');
+            const age = localStorage.getItem('smartkiddo_age');
+
+            if (name && age) {
+                // Profile exists, show year selection view
+                updateGreeting(name);
+                document.getElementById('reset-profile-btn').style.display = "inline-block";
+                showView('year-view');
+            } else {
+                // No profile found, show onboarding view
+                document.getElementById('user-display').textContent = "";
+                document.getElementById('reset-profile-btn').style.display = "none";
+                showView('onboarding-view');
+            }
+            applyLanguage();
+        }
+
+        // Save profile to LocalStorage
+        function saveProfile() {
+            const nameInput = document.getElementById('username').value.trim();
+            const ageInput = document.getElementById('userage').value.trim();
+
+            if (!nameInput || !ageInput) {
+                alert(currentLang === 'zh' ? '请输入名字和年龄！' : currentLang === 'my' ? 'Sila masukkan nama dan umur anda!' : 'Please enter your name and age!');
+                return;
+            }
+
+            localStorage.setItem('smartkiddo_name', nameInput);
+            localStorage.setItem('smartkiddo_age', ageInput);
+
+            checkProfile();
+        }
+
+        // Reset Profile data
+        function resetProfile() {
+            if (confirm(currentLang === 'zh' ? '确认要重置个人资料吗？' : currentLang === 'my' ? 'Adakah anda mahu set semula profil?' : 'Are you sure you want to reset your profile?')) {
+                localStorage.removeItem('smartkiddo_name');
+                localStorage.removeItem('smartkiddo_age');
+                document.getElementById('username').value = "";
+                document.getElementById('userage').value = "";
+                selectedYear = null;
+                checkProfile();
+            }
+        }
+
+        // Navigation between "Views"
+        function showView(viewId) {
+            // Hide all views
+            const views = document.querySelectorAll('.view');
+            views.forEach(view => view.classList.remove('active'));
+
+            // Show selected view
+            const activeView = document.getElementById(viewId);
+            if (activeView) {
+                activeView.classList.add('active');
+            }
+        }
+
+        // Year Selected handler
+        function selectYear(year) {
+            selectedYear = year;
+            showView('topic-view');
+            applyLanguage();
+        }
+
+        function goBackToYears() {
+            selectedYear = null;
+            showView('year-view');
+        }
+
+        // Topic selected handler
+        function startMath(topic) {
+            const name = localStorage.getItem('smartkiddo_name');
+            alert(`Ready to learn! Play ${topic.toUpperCase()} for Year ${selectedYear}, ${name}!`);
+            // You can replace this alert with code to load your interactive math games here.
+        }
+
+        // Update greeting on top
+        function updateGreeting(name) {
+            const template = translations[currentLang].greeting;
+            document.getElementById('user-display').textContent = template.replace('{name}', name);
+        }
+
+        // Language Switcher Function
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('smartkiddo_lang', lang);
+            
+            const name = localStorage.getItem('smartkiddo_name');
+            if (name) {
+                updateGreeting(name);
+            }
+            applyLanguage();
+        }
+
+        // Apply translations dynamically to the DOM elements
+        function applyLanguage() {
+            const langData = translations[currentLang];
+
+            // Onboarding View Elements
+            document.getElementById('onboard-title').textContent = langData.onboardTitle;
+            document.getElementById('label-name').textContent = langData.labelName;
+            document.getElementById('username').placeholder = langData.placeholderName;
+            document.getElementById('label-age').textContent = langData.labelAge;
+            document.getElementById('userage').placeholder = langData.placeholderAge;
+            document.getElementById('btn-start').textContent = langData.btnStart;
+
+            // Year View Elements
+            document.getElementById('year-title').textContent = langData.yearTitle;
+            const prefixes = document.querySelectorAll('.year-prefix');
+            prefixes.forEach(prefix => prefix.textContent = langData.yearPrefix);
+
+            // Topic View Elements
+            if (selectedYear) {
+                const yearPrefix = langData.yearPrefix + " " + selectedYear;
+                document.getElementById('topic-title').textContent = langData.topicTitle.replace('{year}', yearPrefix);
+            }
+            document.getElementById('btn-tambah').textContent = langData.tambah;
+            document.getElementById('btn-tolak').textContent = langData.tolak;
+            document.getElementById('btn-darab').textContent = langData.darab;
+            document.getElementById('btn-bahagi').textContent = langData.bahagi;
+            document.getElementById('btn-sifir').textContent = langData.sifir;
+            document.getElementById('btn-back').textContent = langData.btnBack;
+
+            // Reset Button Element
+            document.getElementById('reset-profile-btn').textContent = langData.btnReset;
+        }
+    </script>
+</body>
+</html>
