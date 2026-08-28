@@ -422,6 +422,8 @@
             gap: 15px;
             text-align: left;
             transition: all 0.3s;
+            width: 100%;
+            cursor: pointer;
         }
 
         .btn-topic .topic-icon-frame {
@@ -475,6 +477,7 @@
             gap: 8px;
             box-shadow: none;
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .btn-navigation:hover {
@@ -482,6 +485,234 @@
             border-color: white;
             background: rgba(255,255,255,0.05);
             transform: translateY(-2px);
+        }
+
+        /* -------------------------------------------------------------
+           NEW ADDITION CONTENT SUB-STYLES (Tahun 1 - Tambah)
+        ------------------------------------------------------------- */
+        .space-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .space-tab {
+            flex: 1;
+            padding: 12px;
+            border-radius: 50px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .space-tab.active {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 42, 133, 0.2);
+        }
+
+        /* Formulas list cards */
+        .formula-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 18px;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .formula-card:hover {
+            border-color: var(--neon-blue);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .formula-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .formula-icon {
+            font-size: 24px;
+            background: rgba(0, 240, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--neon-blue);
+        }
+
+        .formula-card h3 {
+            font-size: 18px;
+            color: var(--neon-blue);
+        }
+
+        .formula-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        /* Custom graphic displays */
+        .addition-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: rgba(11, 0, 26, 0.5);
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .item-group {
+            display: flex;
+            gap: 5px;
+            letter-spacing: 2px;
+        }
+
+        /* Number Line Graphic */
+        .number-line-container {
+            background: rgba(11, 0, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 20px 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+
+        .number-line {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            min-width: 320px;
+            padding-top: 15px;
+        }
+
+        .number-line::before {
+            content: '';
+            position: absolute;
+            top: 25px; left: 0; right: 0; height: 3px;
+            background: var(--glass-border);
+            z-index: 1;
+        }
+
+        .num-node {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #221443;
+            border: 2px solid var(--glass-border);
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .num-node.active {
+            background: var(--neon-blue);
+            border-color: white;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Jump Arc Overlay representation */
+        .jump-arc {
+            position: absolute;
+            height: 25px;
+            border: 2px dashed var(--neon-pink);
+            border-bottom: none;
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+            top: 2px;
+            z-index: 3;
+            animation: bounceArc 0.6s infinite alternate;
+        }
+
+        @keyframes bounceArc {
+            from { transform: translateY(0); }
+            to { transform: translateY(-4px); }
+        }
+
+        /* Latihan / Quiz structures */
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+        }
+
+        .question-box {
+            background: rgba(11, 0, 26, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media(max-width: 450px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn-option {
+            background: rgba(255,255,255,0.04);
+            border: 2px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-option:hover {
+            border-color: var(--neon-pink);
+            background: rgba(255, 42, 133, 0.05);
+            transform: scale(1.02);
+        }
+
+        .btn-option.correct {
+            background: rgba(57, 255, 20, 0.15) !important;
+            border-color: var(--neon-green) !important;
+            color: var(--neon-green);
+        }
+
+        .btn-option.incorrect {
+            background: rgba(255, 42, 133, 0.15) !important;
+            border-color: var(--neon-pink) !important;
+            color: var(--neon-pink);
         }
 
         /* Footer */
@@ -600,6 +831,100 @@
                 </button>
             </div>
 
+            <!-- -------------------------------------------------------------
+               NEW CONTENT VIEW: TAHUN 1 - TAMBAH SPACE STATION
+            ------------------------------------------------------------- -->
+            <div id="tambah-content-view" class="view">
+                <h2 id="tambah-main-title">Tambah Space Station</h2>
+                <p id="tambah-main-subtitle" class="subtitle">Let's master addition using simple Cosmic Formulas!</p>
+
+                <!-- Tabs: Learn vs Practice -->
+                <div class="space-tabs">
+                    <button id="tab-learn" class="space-tab active" onclick="App.switchTab('learn')">🚀 Jom Belajar</button>
+                    <button id="tab-practice" class="space-tab" onclick="App.switchTab('practice')">👾 Latihan Kuiz</button>
+                </div>
+
+                <!-- Tab Area: Learn Methods -->
+                <div id="tambah-learn-zone" class="tab-content-container">
+                    
+                    <!-- Formula 1: Visual Counting -->
+                    <div class="formula-card">
+                        <div class="formula-header">
+                            <div class="formula-icon">🍒</div>
+                            <h3 id="f1-title">Formula 1: The Visual Explorer</h3>
+                        </div>
+                        <p id="f1-desc">Perfect for students who like to see things clearly! Count the fruits or stars altogether to find the total.</p>
+                        <div class="addition-display">
+                            <span class="item-group">🍒🍒🍒</span> 
+                            <span>+</span> 
+                            <span class="item-group">🍒🍒</span> 
+                            <span>=</span> 
+                            <span style="color: var(--neon-pink);">🍒🍒🍒🍒🍒 (5)</span>
+                        </div>
+                    </div>
+
+                    <!-- Formula 2: The Space Jump (Number Line) -->
+                    <div class="formula-card">
+                        <div class="formula-header">
+                            <div class="formula-icon">📏</div>
+                            <h3 id="f2-title">Formula 2: The Space Jump</h3>
+                        </div>
+                        <p id="f2-desc">For structural thinkers. Start at the first number, then jump forward! Let's do 4 + 3:</p>
+                        
+                        <div class="number-line-container">
+                            <div class="number-line">
+                                <!-- Interactive visually represented jump arc -->
+                                <div class="jump-arc" style="left: 45%; width: 27%;"></div>
+                                <div class="num-node">0</div>
+                                <div class="num-node">1</div>
+                                <div class="num-node">2</div>
+                                <div class="num-node font-f">3</div>
+                                <div class="num-node active">4</div>
+                                <div class="num-node">5</div>
+                                <div class="num-node">6</div>
+                                <div class="num-node active" style="background:var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink);">7</div>
+                                <div class="num-node">8</div>
+                                <div class="num-node">9</div>
+                                <div class="num-node">10</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formula 3: The Mind Lock & Kawan 10 (Memory Techniques) -->
+                    <div class="formula-card">
+                        <div class="formula-header">
+                            <div class="formula-icon">🧠</div>
+                            <h3 id="f3-title">Formula 3: The Mind Lock Trick</h3>
+                        </div>
+                        <p id="f3-desc">Abstract & Fast! When solving 7 + 2, put the larger number (7) in your head, lock it, and count forward 2 fingers: "7... 8, 9!".</p>
+                        <p style="font-weight:bold; color: var(--neon-yellow);" id="f3-tip">⭐ Super Tip: Remember "Kawan 10" (Friends of 10) to add instantly: (9+1), (8+2), (7+3), (6+4), (5+5) always equal 10!</p>
+                    </div>
+
+                </div>
+
+                <!-- Tab Area: Exercise/Practice -->
+                <div id="tambah-practice-zone" class="tab-content-container" style="display:none;">
+                    <div class="quiz-progress">
+                        <span id="quiz-q-num">Question 1/5</span>
+                        <span id="quiz-score">Score: 0 XP</span>
+                    </div>
+
+                    <!-- The Dynamic Question Rendering Panel -->
+                    <div class="question-box" id="active-question-box">
+                        Loading challenge...
+                    </div>
+
+                    <div class="quiz-options" id="active-options-grid">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Back to topics button -->
+                <button class="btn btn-navigation" onclick="App.goBackToTopics()">
+                    <span>⬅️</span> <span id="back-topics-txt">Go Back to Topics</span>
+                </button>
+            </div>
+
         </div>
     </main>
 
@@ -643,7 +968,6 @@
             playSuccess() {
                 this.init();
                 const now = this.ctx.currentTime;
-                // Double pulse upbeat sequence
                 const playStep = (freq, delay, dur) => {
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
@@ -659,12 +983,29 @@
                 playStep(523.25, 0, 0.1); // C5
                 playStep(659.25, 0.08, 0.1); // E5
                 playStep(783.99, 0.16, 0.2); // G5
+            },
+            playError() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+                
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(now + 0.2);
             }
         };
 
         /**
          * Canvas Confetti Particle Engine
-         * Efficient drawing context logic for animations
          */
         const ConfettiEngine = {
             canvas: null,
@@ -756,7 +1097,27 @@
                 btnBack: "Go Back",
                 btnReset: "Reset",
                 nameAlert: "Please enter your name!",
-                ageAlert: "Please enter a valid age!"
+                ageAlert: "Please enter a valid age!",
+
+                // Added translation modules for Tambah Content Page
+                tambahTitle: "Addition Space Base",
+                tambahSubtitle: "Learn with visual grids, jump paths, and lock techniques!",
+                tabLearn: "🚀 Let's Learn",
+                tabPractice: "👾 Star Quiz",
+                f1Title: "Formula 1: The Visual Explorer",
+                f1Desc: "Perfect for students who like to see things clearly! Count the space fruits altogether to find the total.",
+                f2Title: "Formula 2: The Space Jump",
+                f2Desc: "For structural thinkers. Start at the first number and jump forward using your space map! Let's solve 4 + 3:",
+                f3Title: "Formula 3: The Mind Lock Shortcut",
+                f3Desc: "Fast & Clever! When adding numbers like 7 + 2, place the larger number (7) in your head, lock it, and count forward using 2 fingers: \"7... 8, 9!\".",
+                f3Tip: "⭐ Cosmic Super Tip: Always remember \"Friends of 10\" (Kawan 10) to solve equations instantly: (9+1), (8+2), (7+3), (6+4), and (5+5) always equal 10!",
+                backToTopics: "Go back to Mission Board",
+                qNumLabel: "Question {num} of 5",
+                scoreLabel: "Score: {xp} XP",
+                qSuccessMsg: "Excellent! You earned +10 XP!",
+                qCompleteHeader: "Mission Successful! 🌟",
+                qCompleteBody: "You conquered the Addition Cosmic Quiz! Your skills are out of this world. Keep practicing to level up!",
+                qCompleteBtn: "Return to Base"
             },
             my: {
                 onboardTitle: "Masuk ke Orbit!",
@@ -780,7 +1141,27 @@
                 btnBack: "Kembali",
                 btnReset: "Set Semula",
                 nameAlert: "Sila masukkan nama anda!",
-                ageAlert: "Sila masukkan umur yang sah!"
+                ageAlert: "Sila masukkan umur yang sah!",
+
+                // Added translation modules for Tambah Content Page
+                tambahTitle: "Pangkalan Angkasa Tambah",
+                tambahSubtitle: "Kuasai tambah dengan kaedah visual, garis nombor, dan trik minda!",
+                tabLearn: "🚀 Jom Belajar",
+                tabPractice: "👾 Kuiz Bintang",
+                f1Title: "Formula 1: Penjelajah Visual",
+                f1Desc: "Sangat sesuai untuk pelajar yang suka melihat gambar! Kira semua buah angkasa bersama-sama untuk cari jumlahnya.",
+                f2Title: "Formula 2: Lompatan Angkasa",
+                f2Desc: "Untuk pelajar logikal. Mula di nombor pertama dan lompat ke depan menggunakan peta angkasa anda! Jom selesaikan 4 + 3:",
+                f3Title: "Formula 3: Trik Kunci Minda",
+                f3Desc: "Cepat & Bijak! Untuk selesaikan 7 + 2, letakkan nombor yang lebih besar (7) dalam kepala, kunci ia, dan kira ke depan guna 2 jari: \"7... 8, 9!\".",
+                f3Tip: "⭐ Tip Angkasa: Ingat \"Kawan 10\" untuk mengira secara pantas: (9+1), (8+2), (7+3), (6+4), dan (5+5) semuanya bersamaan dengan 10!",
+                backToTopics: "Kembali ke Senarai Misi",
+                qNumLabel: "Soalan {num} daripada 5",
+                scoreLabel: "Skor: {xp} XP",
+                qSuccessMsg: "Hebat! Anda dapat +10 XP!",
+                qCompleteHeader: "Misi Berjaya! 🌟",
+                qCompleteBody: "Anda telah menakluki Kuiz Tambah Angkasa! Kepintaran anda luar biasa sekali. Teruskan berlatih!",
+                qCompleteBtn: "Kembali ke Pangkalan"
             },
             zh: {
                 onboardTitle: "进入太空轨道！",
@@ -804,7 +1185,27 @@
                 btnBack: "返回",
                 btnReset: "重置",
                 nameAlert: "请输入您的名字！",
-                ageAlert: "请输入正确的年龄！"
+                ageAlert: "请输入正确的年龄！",
+
+                // Added translation modules for Tambah Content Page
+                tambahTitle: "加法空间站 (Tambah)",
+                tambahSubtitle: "使用视觉网格、数轴路径和心算技巧轻松掌握加法！",
+                tabLearn: "🚀 探索加法",
+                tabPractice: "👾 星际测试",
+                f1Title: "方法一：视觉探索法",
+                f1Desc: "适合喜欢直观画面的学生！把所有的太空水果放在一起数，就能找出总数是多少。",
+                f2Title: "方法二：太空跃迁（数轴法）",
+                f2Desc: "适合逻辑思考型学生。从第一个数字开始，用你的太空地图向前跳跃！让我们来算 4 + 3：",
+                f3Title: "方法三：大数锁定心算法",
+                f3Desc: "快速而聪明！计算 7 + 2 时，把较大的数（7）放进脑子里锁定，然后用手指往后数2个数字：\"7... 8, 9!\"。",
+                f3Tip: "⭐ 宇宙超级技巧：牢记 \"10的朋友\"（Kawan 10），瞬间秒杀题目：(9+1), (8+2), (7+3), (6+4), 还有 (5+5) 的答案永远都是10哦！",
+                backToTopics: "返回任务板",
+                qNumLabel: "第 {num} 题（共 5 题）",
+                scoreLabel: "得分: {xp} XP",
+                qSuccessMsg: "太棒了！获得 +10 XP！",
+                qCompleteHeader: "任务圆满完成！🌟",
+                qCompleteBody: "你成功通关了星际加法挑战！你的数学能力简直超乎想象。继续保持，冲刺更高等级吧！",
+                qCompleteBtn: "返回基站"
             }
         };
 
@@ -816,10 +1217,16 @@
             selectedYear: null,
             userProfile: { name: '', age: 8, xp: 0 },
 
+            // Quiz States for Tambah
+            currentTab: 'learn',
+            quizQuestions: [],
+            currentQuestionIndex: 0,
+            quizEarnedXP: 0,
+            hasAnswered: false,
+
             init() {
                 ConfettiEngine.init();
                 
-                // Read configurations from Storage
                 const storedLang = localStorage.getItem('smartkiddo_lang');
                 if (storedLang) {
                     this.lang = storedLang;
@@ -832,7 +1239,7 @@
             loadProfile() {
                 const name = localStorage.getItem('smartkiddo_name');
                 const age = localStorage.getItem('smartkiddo_age');
-                const xp = parseInt(localStorage.getItem('smartkiddo_xp')) || 25; // Default XP starting value
+                const xp = parseInt(localStorage.getItem('smartkiddo_xp')) || 25;
 
                 if (name && age) {
                     this.userProfile = { name, age, xp };
@@ -863,12 +1270,11 @@
 
                 localStorage.setItem('smartkiddo_name', nameInput);
                 localStorage.setItem('smartkiddo_age', ageInput);
-                localStorage.setItem('smartkiddo_xp', 35); // Initial XP boost
+                localStorage.setItem('smartkiddo_xp', 35);
 
                 AudioEngine.playSuccess();
                 ConfettiEngine.burst();
 
-                // Small delay to let animations complete before views shift
                 setTimeout(() => {
                     this.loadProfile();
                 }, 800);
@@ -888,15 +1294,12 @@
             },
 
             updateGamificationUI() {
-                // Displays names and computes level bar fills based on XP properties
                 const temp = translations[this.lang].greeting;
                 document.getElementById('header-user').textContent = temp.replace('{name}', this.userProfile.name);
                 
-                // Animate avatar emoji relative to age input values
                 const emoji = this.userProfile.age >= 10 ? '👾' : '🚀';
                 document.getElementById('avatar-emoji').textContent = emoji;
 
-                // Simple simulated level meter
                 const barFill = document.getElementById('xp-bar-fill');
                 setTimeout(() => {
                     barFill.style.width = `${Math.min(this.userProfile.xp, 100)}%`;
@@ -925,16 +1328,26 @@
 
             startMath(topic) {
                 AudioEngine.playSuccess();
-                ConfettiEngine.burst();
                 
-                // Add XP points upon completing a choice selection
-                let currentXP = parseInt(localStorage.getItem('smartkiddo_xp')) || 35;
-                currentXP = Math.min(currentXP + 15, 100);
-                localStorage.setItem('smartkiddo_xp', currentXP);
-                this.userProfile.xp = currentXP;
-                this.updateGamificationUI();
+                // If Year 1 and Tambah are selected, load the highly advanced interactive content page!
+                if (this.selectedYear === 1 && topic === 'tambah') {
+                    this.switchTab('learn');
+                    this.showView('tambah-content-view');
+                } else {
+                    // For other years/topics, fallback to normal gameplay prompt
+                    ConfettiEngine.burst();
+                    let currentXP = parseInt(localStorage.getItem('smartkiddo_xp')) || 35;
+                    currentXP = Math.min(currentXP + 15, 100);
+                    localStorage.setItem('smartkiddo_xp', currentXP);
+                    this.userProfile.xp = currentXP;
+                    this.updateGamificationUI();
+                    alert(`Mission Configured!\nLoading Interactive Game: ${topic.toUpperCase()} (Year ${this.selectedYear})`);
+                }
+            },
 
-                alert(`Mission Configured!\nLoading Interactive Game: ${topic.toUpperCase()} (Year ${this.selectedYear})`);
+            goBackToTopics() {
+                AudioEngine.playHover();
+                this.showView('topic-view');
             },
 
             changeLanguage(lang) {
@@ -973,10 +1386,217 @@
                 document.getElementById('btn-darab').textContent = dict.darab;
                 document.getElementById('btn-bahagi').textContent = dict.bahagi;
                 document.getElementById('btn-sifir').textContent = dict.sifir;
-                document.getElementById('back-txt').textContent = dict.btnBack;
+                document.getElementById('btn-back').textContent = dict.btnBack;
 
-                // Top resets label
+                // Reset Button Element
                 document.getElementById('reset-profile-btn').textContent = dict.btnReset;
+
+                // -------------------------------------------------------------
+                // APPLY LANGUAGES FOR TAHUN 1 - TAMBAH CONTENT PAGE
+                // -------------------------------------------------------------
+                document.getElementById('tambah-main-title').textContent = dict.tambahTitle;
+                document.getElementById('tambah-main-subtitle').textContent = dict.tambahSubtitle;
+                document.getElementById('tab-learn').textContent = dict.tabLearn;
+                document.getElementById('tab-practice').textContent = dict.tabPractice;
+                
+                document.getElementById('f1-title').textContent = dict.f1Title;
+                document.getElementById('f1-desc').textContent = dict.f1Desc;
+                document.getElementById('f2-title').textContent = dict.f2Title;
+                document.getElementById('f2-desc').textContent = dict.f2Desc;
+                document.getElementById('f3-title').textContent = dict.f3Title;
+                document.getElementById('f3-desc').textContent = dict.f3Desc;
+                document.getElementById('f3-tip').textContent = dict.f3Tip;
+                document.getElementById('back-topics-txt').textContent = dict.backToTopics;
+
+                if (this.quizQuestions.length > 0) {
+                    this.renderCurrentQuestion();
+                }
+            },
+
+            /* -------------------------------------------------------------
+               TAB ROUTER LOGIC & EXERCISE SYSTEM (Tahun 1 Addition)
+            ------------------------------------------------------------- */
+            switchTab(tab) {
+                AudioEngine.playHover();
+                this.currentTab = tab;
+                const tabLearn = document.getElementById('tab-learn');
+                const tabPractice = document.getElementById('tab-practice');
+                const learnZone = document.getElementById('tambah-learn-zone');
+                const practiceZone = document.getElementById('tambah-practice-zone');
+
+                if (tab === 'learn') {
+                    tabLearn.classList.add('active');
+                    tabPractice.classList.remove('active');
+                    learnZone.style.display = 'block';
+                    practiceZone.style.display = 'none';
+                } else {
+                    tabPractice.classList.add('active');
+                    tabLearn.classList.remove('active');
+                    learnZone.style.display = 'none';
+                    practiceZone.style.display = 'block';
+                    
+                    // Generate new interactive quiz with 5 varied math formulas/learning styles
+                    this.initCosmosQuiz();
+                }
+            },
+
+            // Set up 5 distinct questions (Visual, Kawan 10, Word Problems, Number Line, Doubles)
+            initCosmosQuiz() {
+                this.currentQuestionIndex = 0;
+                this.quizEarnedXP = 0;
+                this.hasAnswered = false;
+
+                // Pedagogical Question styles targeting different IQ profiles
+                this.quizQuestions = [
+                    {
+                        // Q1: Visual Counting (Concrete style)
+                        type: 'visual',
+                        questionEn: "Count the alien eyes: 👁️👁️👁️ + 👁️👁️👁️👁️ = ?",
+                        questionMy: "Kira mata makhluk asing: 👁️👁️👁️ + 👁️👁️👁️👁️ = ?",
+                        questionZh: "数一数外星人的眼睛: 👁️👁️👁️ + 👁️👁️👁️👁️ = ?",
+                        choices: [5, 6, 7, 8],
+                        correct: 7
+                    },
+                    {
+                        // Q2: Friends of 10 / Memory recall (Pattern logic style)
+                        type: 'kawan10',
+                        questionEn: "Complete the Kawan 10 formula: 8 + 🪐 = 10",
+                        questionMy: "Lengkapkan formula Kawan 10: 8 + 🪐 = 10",
+                        questionZh: "完成“10的朋友”配对公式: 8 + 🪐 = 10",
+                        choices: [1, 2, 3, 4],
+                        correct: 2
+                    },
+                    {
+                        // Q3: Word Problem (Language comprehension style)
+                        type: 'word',
+                        questionEn: "Commander Abu has 5 spaceships. Captain Ali gives him 3 more. How many spaceships now?",
+                        questionMy: "Komander Abu ada 5 kapal angkasa. Kapten Ali memberi 3 kapal lagi. Berapakah jumlah kapal sekarang?",
+                        questionZh: "阿布指挥官有5艘飞船，阿里船长又送了他3艘。请问现在总共有几艘飞船？",
+                        choices: [6, 7, 8, 9],
+                        correct: 8
+                    },
+                    {
+                        // Q4: Number Line jump (Spatial logic style)
+                        type: 'numline',
+                        questionEn: "Start jumping at 6, go forward 4 space steps. Where do you land?",
+                        questionMy: "Mula melompat dari nombor 6, maju ke depan 4 langkah. Di manakah anda mendarat?",
+                        questionZh: "从数轴 6 开始，向前跳跃 4 步。你最终会落在哪个数字上？",
+                        choices: [8, 9, 10, 11],
+                        correct: 10
+                    },
+                    {
+                        // Q5: Double Trouble/Memory patterns (Abstract/Recall speed style)
+                        type: 'doubles',
+                        questionEn: "Quick solve the Twin equation: 4 + 4 = ?",
+                        questionMy: "Selesaikan persamaan Kembar ini dengan pantas: 4 + 4 = ?",
+                        questionZh: "快速计算出相同的“双子星”公式: 4 + 4 = ?",
+                        choices: [6, 7, 8, 10],
+                        correct: 8
+                    }
+                ];
+
+                this.renderCurrentQuestion();
+            },
+
+            // Render current question to screen dynamically based on selected translation language
+            renderCurrentQuestion() {
+                const dict = translations[this.lang];
+                const q = this.quizQuestions[this.currentQuestionIndex];
+                this.hasAnswered = false;
+
+                // Update Progress text displays
+                document.getElementById('quiz-q-num').textContent = dict.qNumLabel.replace('{num}', this.currentQuestionIndex + 1);
+                document.getElementById('quiz-score').textContent = dict.scoreLabel.replace('{xp}', this.quizEarnedXP);
+
+                // Set Question Text based on lang
+                let qText = q.questionEn;
+                if (this.lang === 'my') qText = q.questionMy;
+                if (this.lang === 'zh') qText = q.questionZh;
+
+                document.getElementById('active-question-box').innerHTML = qText;
+
+                // Populate choices buttons
+                const grid = document.getElementById('active-options-grid');
+                grid.innerHTML = '';
+                q.choices.forEach(val => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-option';
+                    btn.textContent = val;
+                    btn.onclick = () => this.evaluateQuizChoice(btn, val, q.correct);
+                    grid.appendChild(btn);
+                });
+            },
+
+            // Checks option clicked and yields instant audio-visual feedbacks
+            evaluateQuizChoice(buttonElem, chosenVal, correctVal) {
+                if (this.hasAnswered) return; // Prevent multiple clicks on same question
+                this.hasAnswered = true;
+
+                const dict = translations[this.lang];
+                const options = document.getElementById('active-options-grid').children;
+
+                if (chosenVal === correctVal) {
+                    buttonElem.classList.add('correct');
+                    AudioEngine.playSuccess();
+                    ConfettiEngine.burst();
+
+                    this.quizEarnedXP += 10;
+                    document.getElementById('quiz-score').textContent = dict.scoreLabel.replace('{xp}', this.quizEarnedXP);
+                } else {
+                    buttonElem.classList.add('incorrect');
+                    AudioEngine.playError();
+
+                    // Find and highlight correct option to support visual learning corrections
+                    for (let opt of options) {
+                        if (parseInt(opt.textContent) === correctVal) {
+                            opt.classList.add('correct');
+                        }
+                    }
+                }
+
+                // Wait 1.5 seconds so students see the correction before loading next screen
+                setTimeout(() => {
+                    this.goToNextQuizStep();
+                }, 1500);
+            },
+
+            goToNextQuizStep() {
+                this.currentQuestionIndex++;
+                if (this.currentQuestionIndex < this.quizQuestions.length) {
+                    this.renderCurrentQuestion();
+                } else {
+                    this.concludeQuizSession();
+                }
+            },
+
+            // Conclude Quiz view, grant real persistent XP rewards to browser localStorage
+            concludeQuizSession() {
+                const dict = translations[this.lang];
+                const quizBox = document.getElementById('active-question-box');
+                const grid = document.getElementById('active-options-grid');
+
+                quizBox.innerHTML = `
+                    <h3 style="color: var(--neon-yellow); font-size: 24px; margin-bottom: 10px;">${dict.qCompleteHeader}</h3>
+                    <p style="font-size: 15px; color: var(--text-muted); line-height: 1.5; font-weight: normal;">${dict.qCompleteBody}</p>
+                `;
+
+                grid.innerHTML = `
+                    <button class="btn" style="grid-column: span 2;" onclick="App.rewardXPToProfile()">${dict.qCompleteBtn}</button>
+                `;
+
+                AudioEngine.playSuccess();
+                ConfettiEngine.burst();
+            },
+
+            rewardXPToProfile() {
+                // Reward persistent profile level progress XP
+                let currentXP = parseInt(localStorage.getItem('smartkiddo_xp')) || 35;
+                currentXP = Math.min(currentXP + this.quizEarnedXP, 100);
+                localStorage.setItem('smartkiddo_xp', currentXP);
+                this.userProfile.xp = currentXP;
+                
+                this.loadProfile();
+                this.goBackToTopics();
             }
         };
 
