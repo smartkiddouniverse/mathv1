@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1: Visual Explorer - SmartKiddo Universe</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --space-bg: linear-gradient(135deg, #0b001a 0%, #1a0b36 50%, #030008 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --neon-pink: #ff2a85;
+            --neon-blue: #00f0ff;
+            --neon-purple: #bd00ff;
+            --neon-yellow: #ffdf00;
+            --neon-green: #39ff14;
+            --text-light: #ffffff;
+            --text-muted: #b5a8cb;
+            --accent-gradient: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3, .brand, .btn, .step-badge {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        body {
+            background: var(--space-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            background-position: 0 0, 40px 60px;
+            opacity: 0.4;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        header {
+            background: rgba(11, 0, 26, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .brand {
+            font-size: 26px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .gamification-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-capsule {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .avatar {
+            font-size: 22px;
+            background: rgba(255,255,255,0.1);
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; border: 1px solid var(--neon-blue);
+        }
+
+        .xp-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .xp-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .xp-bar-bg {
+            width: 100px; height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px; overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            box-shadow: 0 0 10px var(--neon-blue);
+            transition: width 0.5s ease;
+        }
+
+        .lang-dropdown {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            color: white;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .lang-dropdown:hover { border-color: var(--neon-blue); }
+        .lang-dropdown option { background-color: #1a0b36; color: white; }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            z-index: 1;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .back-classroom-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+
+        .classroom-badge {
+            background: rgba(255, 42, 133, 0.2);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        h2 { font-size: 30px; margin-bottom: 8px; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        .subtitle { color: var(--text-muted); margin-bottom: 30px; font-size: 15px; }
+
+        .teacher-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 15px 20px;
+            border-radius: 20px;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .teacher-avatar { font-size: 36px; }
+        .teacher-speech { font-size: 14px; line-height: 1.5; color: #e2d9f3; }
+
+        /* Step Card Styling */
+        .step-container { text-align: left; margin-bottom: 30px; }
+        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .step-badge {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            color: white; width: 28px; height: 28px; display: flex;
+            align-items: center; justify-content: center; border-radius: 50%;
+            font-size: 14px; font-weight: bold;
+        }
+        .step-title { font-size: 18px; color: var(--neon-blue); font-weight: bold; }
+
+        /* Simulator Board */
+        .simulator-section {
+            background: rgba(11, 0, 26, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .equation-selector-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-eq {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: white; padding: 10px 18px; border-radius: 14px;
+            font-weight: bold; cursor: pointer; transition: all 0.2s;
+            font-size: 15px;
+        }
+
+        .btn-eq:hover, .btn-eq.active {
+            border-color: var(--neon-pink);
+            background: rgba(255, 42, 133, 0.15);
+            box-shadow: 0 0 10px rgba(255, 42, 133, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .formula-summary-bar {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: var(--neon-yellow);
+            letter-spacing: 1px;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .interactive-prompt {
+            font-size: 13px;
+            color: var(--neon-blue);
+            font-weight: bold;
+            margin-bottom: 15px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        /* Ten-Frame Grid CSS */
+        .frames-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .frame-box {
+            background: rgba(11, 0, 26, 0.7);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 15px;
+            max-width: 320px;
+            width: 100%;
+        }
+
+        .frame-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .ten-frame-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .ten-frame-cell {
+            aspect-ratio: 1;
+            border: 2px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: rgba(255,255,255,0.01);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        /* Cell States */
+        .ten-frame-cell.filled-a {
+            border: 2px solid var(--neon-pink);
+            background: rgba(255, 42, 133, 0.05);
+        }
+        .ten-frame-cell.filled-b {
+            border: 2px solid var(--neon-blue);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* Active Tap Chaser Glow */
+        .ten-frame-cell.next-to-tap {
+            border-color: var(--neon-yellow) !important;
+            box-shadow: 0 0 12px var(--neon-yellow);
+            animation: pulseGlow 1s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        /* Tapped / Checked Counted State */
+        .ten-frame-cell.tapped {
+            background: rgba(57, 255, 20, 0.15) !important;
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+        }
+
+        .crystal-item {
+            font-size: 26px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+            user-select: none;
+            transition: transform 0.2s;
+        }
+
+        .cell-number {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .ten-frame-cell.tapped .cell-number {
+            color: var(--neon-green);
+            font-size: 12px;
+            opacity: 1;
+        }
+
+        /* Science & Parent Corner Toggle */
+        .corner-toggle-btn {
+            background: rgba(255, 223, 0, 0.1);
+            border: 1px solid var(--neon-yellow);
+            color: var(--neon-yellow);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 0 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .corner-toggle-btn:hover {
+            background: var(--neon-yellow);
+            color: #0b001a;
+            box-shadow: 0 0 15px rgba(255, 223, 0, 0.3);
+        }
+
+        .pedagogical-corner {
+            background: rgba(255, 223, 0, 0.02);
+            border: 1px dashed var(--neon-yellow);
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            text-align: left;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .corner-section h4 {
+            font-size: 14px;
+            color: var(--neon-yellow);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .corner-section p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .corner-badge {
+            display: inline-block;
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--neon-blue);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        /* Strategy Cards Panel */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 650px) {
+            .strategy-grid { grid-template-columns: 1fr; }
+        }
+
+        .strategy-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .strategy-card.normal-branch { border-color: var(--neon-blue); }
+        .strategy-card.slow-branch { border-color: var(--neon-purple); }
+
+        .strat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .normal-branch .strat-header { color: var(--neon-blue); }
+        .slow-branch .strat-header { color: var(--neon-purple); }
+
+        .strat-tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .strat-item h5 {
+            font-size: 14px;
+            color: #fff;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .strat-item p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Mini-Lab Quiz Arena */
+        .quiz-arena {
+            background: rgba(255, 42, 133, 0.03);
+            border: 1px solid rgba(255, 42, 133, 0.2);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .quiz-arena-title {
+            color: var(--neon-pink);
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .quiz-equation-display {
+            font-size: 26px;
+            font-weight: bold;
+            color: white;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            max-width: 400px;
+            margin: 20px auto 0;
+        }
+
+        @media (max-width: 450px) {
+            .options-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .btn-opt {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: white; padding: 12px; border-radius: 14px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-opt:hover {
+            border-color: var(--neon-pink);
+            background: rgba(255, 42, 133, 0.1);
+        }
+
+        .btn-opt.correct {
+            background: rgba(57, 255, 20, 0.15) !important;
+            border-color: var(--neon-green) !important;
+            color: var(--neon-green);
+        }
+
+        .btn-opt.incorrect {
+            background: rgba(255, 42, 133, 0.15) !important;
+            border-color: var(--neon-pink) !important;
+            color: var(--neon-pink);
+        }
+
+        .feedback-message {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* Buttons & Footer */
+        .btn-navigation {
+            background: transparent; color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+            padding: 12px 25px; border-radius: 15px;
+            font-size: 14px; font-weight: bold;
+            width: auto; display: inline-flex; align-items: center; gap: 8px;
+            cursor: pointer; transition: all 0.3s;
+        }
+
+        .btn-navigation:hover {
+            color: white; border-color: white; background: rgba(255,255,255,0.05);
+        }
+
+        footer {
+            padding: 20px; text-align: center; font-size: 13px; color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.03); z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container" onclick="App.goBack()">
+            <span class="brand">SmartKiddo Universe</span>
+        </div>
+        
+        <div class="gamification-status">
+            <div class="profile-capsule">
+                <div class="avatar" id="avatar-emoji">🚀</div>
+                <div class="xp-container">
+                    <span id="header-user" class="xp-label">Hi, Kiddo!</span>
+                    <div class="xp-bar-bg">
+                        <div class="xp-bar-fill" id="xp-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <select id="lang-select" class="lang-dropdown" onchange="App.changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="my">Bahasa Melayu</option>
+                <option value="zh">中文</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <div class="glass-card">
+            
+            <div class="back-classroom-header">
+                <span class="classroom-badge" id="badge-txt">Classroom 1</span>
+                <button class="btn-navigation" onclick="App.goBack()" style="margin:0; padding: 6px 12px; border-radius:10px; font-size:12px;">
+                    <span>⬅️</span> <span id="back-nav-txt">Exit Class</span>
+                </button>
+            </div>
+
+            <h2 id="class-title">Cosmic Ten-Frame Classroom</h2>
+            <p id="class-subtitle" class="subtitle">Formula 1: The Visual Explorer (Penjelajah Visual)</p>
+
+            <!-- Guide Box -->
+            <div class="teacher-box">
+                <div class="teacher-avatar">🧑‍🚀</div>
+                <div class="teacher-speech" id="teacher-speech-bubble">
+                    Hey Cadet! Let's explore why the Ten-Frame is our magical space weapon to add numbers instantly without getting lost!
+                </div>
+            </div>
+
+            <!-- Parent & Teacher Pedagogy Toggle -->
+            <button class="corner-toggle-btn" onclick="App.togglePedagogy()">
+                💡 <span id="corner-btn-txt">Show Parents & Teachers Corner</span>
+            </button>
+            <div class="pedagogical-corner" id="pedagogical-panel">
+                <div class="corner-section">
+                    <h4 id="corner-sec1-title">Pedagogical Framework: Why this works</h4>
+                    <p id="corner-sec1-desc">
+                        Designed for cognitive loading offloading. Traditional math forces slow learners to calculate mentally, overloading working memory. Our system externalizes memory onto structured Ten-Frames, helping kids subitize groups of 5 and 10 effortlessly.
+                    </p>
+                    <div style="margin-bottom: 15px;">
+                        <span class="corner-badge">KSSR Year 1 Aligned</span>
+                        <span class="corner-badge">Dyscalculia Support</span>
+                        <span class="corner-badge">Multi-Sensory Chimes</span>
+                        <span class="corner-badge">Concrete-to-Pictorial</span>
+                    </div>
+                    <h4 id="corner-sec2-title">Instructions for Parents/Teachers</h4>
+                    <p id="corner-sec2-desc">
+                        1. Select different equations below to show how addition regrouping fills up a frame of 10 first.<br>
+                        2. Ask the student to count aloud by tapping the pulsing crystal. Notice the changing sound and color preventing tracking loss.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 1: Introduction -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-badge">1</div>
+                    <div class="step-title" id="step1-title">Understand the Space Weapon</div>
+                </div>
+                <p style="color: var(--text-muted); font-size:14px; line-height:1.5;" id="step1-desc">
+                    Counting scattered items can make your head spin! The Ten-Frame (Bingkai Sepuluh) locks objects into 10 perfect boxes (5 on top, 5 on bottom). When a row is full, it's always 5. When the grid is full, it's 10!
+                </p>
+            </div>
+
+            <!-- Step 2: Interactive Simulator -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-badge">2</div>
+                    <div class="step-title" id="step2-title">Interactive Crystal Visualizer</div>
+                </div>
+                
+                <div class="simulator-section">
+                    <label style="display:block; margin-bottom: 12px; font-weight:bold; font-size:13px; text-transform:uppercase; color: var(--neon-blue);" id="label-selector">
+                        Select a math mission to load:
+                    </label>
+                    <div class="equation-selector-container">
+                        <button class="btn-eq" onclick="App.selectSimulatorEq(4, 2)" id="eq-btn-1">4 + 2</button>
+                        <button class="btn-eq" onclick="App.selectSimulatorEq(5, 5)" id="eq-btn-2">5 + 5</button>
+                        <button class="btn-eq" onclick="App.selectSimulatorEq(7, 4)" id="eq-btn-3">7 + 4</button>
+                        <button class="btn-eq" onclick="App.selectSimulatorEq(8, 5)" id="eq-btn-4">8 + 5</button>
+                    </div>
+
+                    <div class="formula-summary-bar" id="eq-display-str">
+                        4 + 2 = ?
+                    </div>
+
+                    <div class="interactive-prompt" id="prompt-txt">
+                        👉 Tap on each crystal to count them aloud!
+                    </div>
+
+                    <!-- Visual Frames Grid wrapper -->
+                    <div class="frames-wrapper" id="frames-container">
+                        <!-- Dynamically populated ten-frames -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Scientific Tips and Tricks -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-badge">3</div>
+                    <div class="step-title" id="step3-title">Cosmic Secrets (Tips & Tricks)</div>
+                </div>
+
+                <div class="strategy-grid">
+                    <!-- Normal Learners -->
+                    <div class="strategy-card normal-branch">
+                        <div class="strat-header">
+                            <span>🚀</span> <span id="normal-strat-title">Quick Cosmic Thinkers</span>
+                        </div>
+                        <div class="strat-tips-list">
+                            <div class="strat-item">
+                                <h5 id="normal-tip1-head">The "Group of 5" Shortcut</h5>
+                                <p id="normal-tip1-body">Don't count the top row! Once the top row is full, just lock "5" in your mind and count the extras: 5... 6, 7!</p>
+                            </div>
+                            <div class="strat-item">
+                                <h5 id="normal-tip2-head">Make 10 Regrouping</h5>
+                                <p id="normal-tip2-body">When adding numbers like 8 + 5, look at how 8 only needs 2 more to complete 10. Take 2 away from 5, leaving 3. The answer is instantly 10 + 3 = 13!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slow / Dyscalculic Learners -->
+                    <div class="strategy-card slow-branch">
+                        <div class="strat-header">
+                            <span>🧸</span> <span id="slow-strat-title">Patient Space Heroes</span>
+                        </div>
+                        <div class="strat-tips-list">
+                            <div class="strat-item">
+                                <h5 id="slow-tip1-head">Touch-to-Glow Tracking</h5>
+                                <p id="slow-tip1-body">Children with dyscalculia easily double-count. Let them touch the cells in our simulator sequentially. The cells glow and display counting numbers, preventing visual tracker slips.</p>
+                            </div>
+                            <div class="strat-item">
+                                <h5 id="slow-tip2-head">Color Separation</h5>
+                                <p id="slow-tip2-body">By color-coding the numbers (Pink and Blue), children see that two smaller groups make one larger total, building robust spatial number sense.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Mini Practice Lab -->
+            <div class="step-container">
+                <div class="step-header">
+                    <div class="step-badge">4</div>
+                    <div class="step-title" id="step4-title">Cosmic Mini-Lab (Test Your Skill)</div>
+                </div>
+
+                <div class="quiz-arena">
+                    <h3 class="quiz-arena-title" id="lab-title">Verify Your Crystal Power!</h3>
+                    <p style="font-size:14px; color: var(--text-muted); margin-bottom: 15px;" id="lab-desc">
+                        Look at the Ten-Frame visualization of pink (4) and blue (3) crystals. Solve the mission!
+                    </p>
+
+                    <!-- Mini-Lab visual of 4 + 3 in ten frame -->
+                    <div class="frames-wrapper">
+                        <div class="frame-box" style="margin:0 auto; max-width:280px; border-color: var(--neon-pink);">
+                            <div class="ten-frame-grid">
+                                <div class="ten-frame-cell filled-a"><span class="crystal-item">💎</span></div>
+                                <div class="ten-frame-cell filled-a"><span class="crystal-item">💎</span></div>
+                                <div class="ten-frame-cell filled-a"><span class="crystal-item">💎</span></div>
+                                <div class="ten-frame-cell filled-a"><span class="crystal-item">💎</span></div>
+                                <div class="ten-frame-cell filled-b"><span class="crystal-item">🔮</span></div>
+                                <div class="ten-frame-cell filled-b"><span class="crystal-item">🔮</span></div>
+                                <div class="ten-frame-cell filled-b"><span class="crystal-item">🔮</span></div>
+                                <div class="ten-frame-cell"></div>
+                                <div class="ten-frame-cell"></div>
+                                <div class="ten-frame-cell"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-equation-display" id="lab-eq-txt">
+                        4 + 3 = ?
+                    </div>
+
+                    <div class="options-grid" id="quiz-options-container">
+                        <button class="btn-opt" onclick="App.checkLabAns(this, 5)">5</button>
+                        <button class="btn-opt" onclick="App.checkLabAns(this, 6)">6</button>
+                        <button class="btn-opt" onclick="App.checkLabAns(this, 7)">7</button>
+                        <button class="btn-opt" onclick="App.checkLabAns(this, 8)">8</button>
+                    </div>
+
+                    <div class="feedback-message" id="lab-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Back to addition dashboard button -->
+            <button class="btn" style="max-width: 350px; margin-top:10px;" onclick="App.goBack()">
+                <span id="exit-btn-txt">Back to Addition Base</span> 🚀
+            </button>
+
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 SmartKiddo Universe. Designed for cosmic learners.
+    </footer>
+
+    <script>
+        const AudioEngine = {
+            ctx: null,
+            init() {
+                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+            },
+            // Generates pitches mapped to sequence count for multisensory ascending staircase counting
+            playCountNode(index) {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                // Pure pentatonic/diatonic scale ascending for counting reinforce
+                const scale = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+                const freq = scale[Math.min(index, scale.length - 1)];
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.start();
+                osc.stop(now + 0.15);
+            },
+            playSuccess() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const playStep = (freq, delay, dur) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + delay);
+                    gain.gain.setValueAtTime(0.06, now + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + dur);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(now + delay); osc.stop(now + delay + dur);
+                };
+                playStep(523.25, 0, 0.1);
+                playStep(659.25, 0.08, 0.1);
+                playStep(783.99, 0.16, 0.2);
+            },
+            playError() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(now + 0.2);
+            }
+        };
+
+        const translations = {
+            en: {
+                badgeTxt: "Classroom 1",
+                backNavTxt: "Exit Class",
+                classTitle: "Cosmic Ten-Frame Classroom",
+                classSubtitle: "Formula 1: The Visual Explorer (Penjelajah Visual)",
+                teacherSpeech: "Hey Cadet! Let's explore why the Ten-Frame is our magical space weapon to add numbers instantly without getting lost!",
+                cornerBtnShow: "Show Parents & Teachers Corner",
+                cornerBtnHide: "Hide Parents & Teachers Corner",
+                sec1Title: "Pedagogical Framework: Why this works",
+                sec1Desc: "Designed for cognitive loading offloading. Traditional mental math forces slow learners to calculate in their head, overloading working memory. Our system externalizes this memory onto structured Ten-Frames, helping kids subitize groups of 5 and 10 effortlessly.",
+                sec2Title: "Instructions for Parents/Teachers",
+                sec2Desc: "1. Select different equations below to show how addition regrouping fills up a frame of 10 first.<br>2. Ask the student to count aloud by tapping the pulsing crystal. Notice the changing sound and color preventing tracking loss.",
+                step1Title: "1. Understand the Space Weapon",
+                step1Desc: "Counting scattered items can make your head spin! The Ten-Frame (Bingkai Sepuluh) locks objects into 10 perfect boxes (5 on top, 5 on bottom). When a row is full, it's always 5. When the grid is full, it's 10!",
+                step2Title: "2. Interactive Crystal Visualizer",
+                step2Desc: "Select a math mission to load:",
+                eqLabel: "Select a math mission to load:",
+                touchPrompt: "👉 Tap on the glowing crystals sequentially to count them!",
+                touchSuccessPrompt: "🌟 Awesome! All crystals counted successfully!",
+                normalStratTitle: "Quick Cosmic Thinkers",
+                normalTip1Head: "The \"Group of 5\" Shortcut",
+                normalTip1Body: "Don't count the top row! Once the top row is full, just lock \"5\" in your mind and count the extras: 5... 6, 7!",
+                normalTip2Head: "Make 10 Regrouping",
+                normalTip2Body: "When adding numbers like 8 + 5, look at how 8 only needs 2 more to complete 10. Take 2 away from 5, leaving 3. The answer is instantly 10 + 3 = 13!",
+                slowStratTitle: "Patient Space Heroes",
+                slowTip1Head: "Touch-to-Glow Tracking",
+                slowTip1Body: "Children with dyscalculia easily double-count. Let them touch the cells in our simulator sequentially. The cells glow and display counting numbers, preventing visual tracker slips.",
+                slowTip2Head: "Color Separation",
+                slowTip2Body: "By color-coding the numbers (Pink and Blue), children see that two smaller groups make one larger total, building robust spatial number sense.",
+                step4Title: "3. Cosmic Mini-Lab (Test Your Skill)",
+                labTitle: "Verify Your Crystal Power!",
+                labDesc: "Look at the Ten-Frame visualization of pink (4) and blue (3) crystals. Solve the mission!",
+                correctFeed: "🎉 Correct! You're an incredible Space Cadet! +10 XP",
+                incorrectFeed: "❌ Not quite! Use the boxes to count and try again.",
+                exitBtnTxt: "Back to Addition Base",
+                frameLabel1: "Frame 1 (Ten Spaces)",
+                frameLabel2: "Frame 2 (Overspill)"
+            },
+            my: {
+                badgeTxt: "Kelas 1",
+                backNavTxt: "Keluar Kelas",
+                classTitle: "Kelas Bingkai Sepuluh Kosmik",
+                classSubtitle: "Formula 1: Penjelajah Visual (The Visual Explorer)",
+                teacherSpeech: "Hai Kadet! Mari kita pelajari mengapa Bingkai Sepuluh adalah senjata angkasa kita untuk mengira dengan pantas tanpa tersesat!",
+                cornerBtnShow: "Tunjukkan Sudut Ibu Bapa & Guru",
+                cornerBtnHide: "Sembunyikan Sudut Ibu Bapa & Guru",
+                sec1Title: "Rangka Kerja Pedagogi: Mengapa Kaedah ini Berjaya",
+                sec1Desc: "Direka khas untuk mengurangkan beban kognitif otak. Pengiraan mental tradisional memaksa murid mengira dalam kepala yang membebankan memori kerja mereka. Sistem kita meletakkan memori tersebut di atas Bingkai Sepuluh secara visual untuk membantu murid mengenal kumpulan 5 dan 10 secara spontan.",
+                sec2Title: "Panduan untuk Ibu Bapa/Guru",
+                sec2Desc: "1. Pilih soalan matematik berbeza di bawah untuk tunjukkan bagaimana tambah mengumpul semula memenuhkan bingkai 10 dulu.<br>2. Minta murid mengira dengan mengetik kristal yang berkelip. Perhatikan perubahan bunyi dan warna untuk bantu elakkan salah kira.",
+                step1Title: "1. Kenali Senjata Angkasa Anda",
+                step1Desc: "Mengira objek yang berterabur boleh memeningkan kepala! Bingkai Sepuluh menyusun objek dalam 10 petak khas (5 di atas, 5 di bawah). Apabila sebaris penuh, ia sentiasa bernilai 5. Apabila seluruh bingkai penuh, ia adalah 10!",
+                step2Title: "2. Visualizer Kristal Interaktif",
+                step2Desc: "Pilih misi tambah untuk dimuatkan:",
+                eqLabel: "Pilih misi tambah untuk dimuatkan:",
+                touchPrompt: "👉 Ketik kristal yang bercahaya mengikut urutan untuk mengira!",
+                touchSuccessPrompt: "🌟 Hebat! Semua kristal telah berjaya dikira!",
+                normalStratTitle: "Pelajar Pintar Kosmik",
+                normalTip1Head: "Pintasan \"Kumpulan 5\"",
+                normalTip1Body: "Jangan kira baris atas satu-satu! Bila baris atas penuh, terus sebut \"5\" dan sambung mengira baki: 5... 6, 7!",
+                normalTip2Head: "Kumpul Semula Kawan 10",
+                normalTip2Body: "Bila menambah 8 + 5, ingat 8 cuma perlukan 2 lagi untuk jadi 10. Ambil 2 dari 5 (baki 3). Jawapannya pantas dapat 10 + 3 = 13!",
+                slowStratTitle: "Wira Sabar Angkasa",
+                slowTip1Head: "Ketik & Bercahaya",
+                slowTip1Body: "Kanak-kanak dyscalculia kerap terlepas atau terlebih kira. Biarkan mereka ketik kotak simulator ini secara berurutan. Kotak akan bercahaya dan menunjukkan nombor pengiraan.",
+                slowTip2Head: "Pemisahan Warna",
+                slowTip2Body: "Dengan membezakan warna (Pink dan Biru), kanak-kanak boleh melihat dengan jelas dua kumpulan kecil bergabung membentuk jumlah besar, mengukuhkan pemahaman nombor.",
+                step4Title: "3. Mini-Lab Kosmik (Uji Kemahiran)",
+                labTitle: "Sahkan Kuasa Kristal Anda!",
+                labDesc: "Lihat visualisasi Bingkai Sepuluh kristal pink (4) dan biru (3) di bawah. Selesaikan misi!",
+                correctFeed: "🎉 Betul! Anda seorang Kadet Angkasa yang hebat! +10 XP",
+                incorrectFeed: "❌ Kurang tepat! Gunakan bantuan kotak visual untuk kira semula.",
+                exitBtnTxt: "Kembali ke Pangkalan Tambah",
+                frameLabel1: "Bingkai 1 (Sepuluh Ruang)",
+                frameLabel2: "Bingkai 2 (Limpahan)"
+            },
+            zh: {
+                badgeTxt: "课堂 1",
+                backNavTxt: "退出课堂",
+                classTitle: "宇宙十格阵课堂",
+                classSubtitle: "方法一：视觉探索法 (The Visual Explorer)",
+                teacherSpeech: "嘿，学员！让我们一起探索为什么十格阵是我们可以瞬间做加法而不会数错的魔法太空武器吧！",
+                cornerBtnShow: "显示家长与教师角落",
+                cornerBtnHide: "隐藏家长与教师角落",
+                sec1Title: "教学法框架：为什么这个方法有效",
+                sec1Desc: "专为减轻大脑认知负荷而设计。传统的心算强迫学习较慢的孩子在脑中计算，容易引起记忆混淆。我们的系统将这些数字具体化到结构性的“十格阵”中，帮助孩子们不费吹灰之力地直观感知 5 和 10 的集合。",
+                sec2Title: "给家长/教师的指导建议",
+                sec2Desc: "1. 在下方选择不同的等式，向孩子演示加法进位如何首先填满第一个十格阵。<br>2. 让学生通过点击正在闪烁的水晶来大声计数。观察声音和颜色锁定的变化，避免漏数。",
+                step1Title: "1. 认识我们的太空武器",
+                step1Desc: "乱七八糟地数数常常会数错！十格阵将物体锁定在10个整齐的格子里（上排5个，下排5个）。上排满了就是5，整个满了就是10！",
+                step2Title: "2. 互动水晶视觉化模拟器",
+                step2Desc: "选择一个加法任务开始：",
+                eqLabel: "选择一个加法任务开始：",
+                touchPrompt: "👉 依次点击发光的水晶，开始计数吧！",
+                touchSuccessPrompt: "🌟 太棒了！所有水晶都点数完毕！",
+                normalStratTitle: "快速宇宙思考者",
+                normalTip1Head: "“5个一组”的快捷方式",
+                normalTip1Body: "不要数第一排！第一排满的时候，在脑中直接锁定“5”，然后往后数剩下的：5... 6, 7！",
+                normalTip2Head: "凑10进位法",
+                normalTip2Body: "计算 8 + 5 时，看 8 只需要 2 就能变成 10。从 5 里拿走 2 剩 3，答案瞬间就是 10 + 3 = 13！",
+                slowStratTitle: "耐心的太空小英雄",
+                slowTip1Head: "点击发光跟踪",
+                slowTip1Body: "患有计算障碍的孩子容易重复点数。让他们在模拟器中按顺序点击格子。格子亮起并显示计数数字，防止视觉遗忘。",
+                slowTip2Head: "颜色的清晰区分",
+                slowTip2Body: "通过对数字进行颜色编码（粉色和蓝色），孩子能清楚看到两个较小的组拼成一个大的总数，建立良好的空间数感。",
+                step4Title: "3. 宇宙微型实验室（技能测试）",
+                labTitle: "验证你的水晶能量！",
+                labDesc: "观察下方粉色 (4) 和蓝色 (3) 水晶的十格阵视觉呈现，完成这个加法算式！",
+                correctFeed: "🎉 答对了！你是一个非常出色的太空学员！+10 XP",
+                incorrectFeed: "❌ 不太对哦！试着用十格阵的格子重新数一数吧。",
+                exitBtnTxt: "返回加法基站",
+                frameLabel1: "十格阵 1 (10格)",
+                frameLabel2: "十格阵 2 (溢出格)"
+            }
+        };
+
+        const App = {
+            lang: 'en',
+            userProfile: { name: 'Kiddo', age: 8, xp: 25 },
+            activeA: 4,
+            activeB: 2,
+            tappedIndex: 0, // Tracker for sequential tap check
+            quizXpRewarded: false,
+
+            init() {
+                this.lang = localStorage.getItem('smartkiddo_lang') || 'en';
+                this.userProfile.name = localStorage.getItem('smartkiddo_name') || 'Kiddo';
+                this.userProfile.age = parseInt(localStorage.getItem('smartkiddo_age')) || 8;
+                this.userProfile.xp = parseInt(localStorage.getItem('smartkiddo_xp')) || 25;
+
+                document.getElementById('lang-select').value = this.lang;
+
+                this.updateGamificationUI();
+                this.applyLanguage();
+                this.selectSimulatorEq(4, 2); // Initial default load
+            },
+
+            updateGamificationUI() {
+                document.getElementById('header-user').textContent = `Hi, ${this.userProfile.name}!`;
+                const emoji = this.userProfile.age >= 10 ? '👾' : '🚀';
+                document.getElementById('avatar-emoji').textContent = emoji;
+                document.getElementById('xp-bar-fill').style.width = `${Math.min(this.userProfile.xp, 100)}%`;
+            },
+
+            changeLanguage(lang) {
+                this.lang = lang;
+                localStorage.setItem('smartkiddo_lang', lang);
+                this.applyLanguage();
+                this.renderSimulator();
+            },
+
+            applyLanguage() {
+                const dict = translations[this.lang];
+                document.getElementById('badge-txt').textContent = dict.badgeTxt;
+                document.getElementById('back-nav-txt').textContent = dict.backNavTxt;
+                document.getElementById('class-title').textContent = dict.classTitle;
+                document.getElementById('class-subtitle').textContent = dict.classSubtitle;
+                document.getElementById('teacher-speech-bubble').textContent = dict.teacherSpeech;
+
+                document.getElementById('corner-btn-txt').textContent = 
+                    document.getElementById('pedagogical-panel').style.display === 'block' ? dict.cornerBtnHide : dict.cornerBtnShow;
+                
+                document.getElementById('corner-sec1-title').textContent = dict.sec1Title;
+                document.getElementById('corner-sec1-desc').textContent = dict.sec1Desc;
+                document.getElementById('corner-sec2-title').textContent = dict.sec2Title;
+                document.getElementById('corner-sec2-desc').textContent = dict.sec2Desc;
+
+                document.getElementById('step1-title').textContent = dict.step1Title;
+                document.getElementById('step1-desc').textContent = dict.step1Desc;
+                document.getElementById('step2-title').textContent = dict.step2Title;
+                document.getElementById('label-selector').textContent = dict.eqLabel;
+
+                document.getElementById('normal-strat-title').textContent = dict.normalStratTitle;
+                document.getElementById('normal-tip1-head').textContent = dict.normalTip1Head;
+                document.getElementById('normal-tip1-body').textContent = dict.normalTip1Body;
+                document.getElementById('normal-tip2-head').textContent = dict.normalTip2Head;
+                document.getElementById('normal-tip2-body').textContent = dict.normalTip2Body;
+
+                document.getElementById('slow-strat-title').textContent = dict.slowStratTitle;
+                document.getElementById('slow-tip1-head').textContent = dict.slowTip1Head;
+                document.getElementById('slow-tip1-body').textContent = dict.slowTip1Body;
+                document.getElementById('slow-tip2-head').textContent = dict.slowTip2Head;
+                document.getElementById('slow-tip2-body').textContent = dict.slowTip2Body;
+
+                document.getElementById('step4-title').textContent = dict.step4Title;
+                document.getElementById('lab-title').textContent = dict.labTitle;
+                document.getElementById('lab-desc').textContent = dict.labDesc;
+                document.getElementById('exit-btn-txt').textContent = dict.exitBtnTxt;
+
+                this.updatePromptUI();
+            },
+
+            togglePedagogy() {
+                const panel = document.getElementById('pedagogical-panel');
+                const dict = translations[this.lang];
+                if (panel.style.display === 'block') {
+                    panel.style.display = 'none';
+                    document.getElementById('corner-btn-txt').textContent = dict.cornerBtnShow;
+                } else {
+                    panel.style.display = 'block';
+                    document.getElementById('corner-btn-txt').textContent = dict.cornerBtnHide;
+                }
+            },
+
+            selectSimulatorEq(a, b) {
+                this.activeA = a;
+                this.activeB = b;
+                this.tappedIndex = 0; // Reset tap chaser tracker
+                
+                // Toggle active style on selector buttons
+                document.querySelectorAll('.btn-eq').forEach(btn => btn.classList.remove('active'));
+                if (a === 4 && b === 2) document.getElementById('eq-btn-1').classList.add('active');
+                if (a === 5 && b === 5) document.getElementById('eq-btn-2').classList.add('active');
+                if (a === 7 && b === 4) document.getElementById('eq-btn-3').classList.add('active');
+                if (a === 8 && b === 5) document.getElementById('eq-btn-4').classList.add('active');
+
+                // Dynamic formula header text update
+                const dict = translations[this.lang];
+                const sumWord = this.lang === 'zh' ? '等于' : this.lang === 'my' ? 'sama dengan' : 'equals';
+                document.getElementById('eq-display-str').textContent = `${a} + ${b} = ${a + b}`;
+
+                this.renderSimulator();
+                this.updatePromptUI();
+            },
+
+            renderSimulator() {
+                const container = document.getElementById('frames-container');
+                container.innerHTML = '';
+
+                const total = this.activeA + this.activeB;
+                const needTwoFrames = total > 10;
+                const framesToCreate = needTwoFrames ? 2 : 1;
+                const dict = translations[this.lang];
+
+                let cellIdGlobal = 0;
+
+                for (let f = 1; f <= framesToCreate; f++) {
+                    const frameBox = document.createElement('div');
+                    frameBox.className = 'frame-box';
+                    frameBox.style.borderColor = f === 1 ? 'var(--neon-pink)' : 'var(--neon-blue)';
+
+                    const label = document.createElement('div');
+                    label.className = 'frame-label';
+                    label.textContent = f === 1 ? dict.frameLabel1 : dict.frameLabel2;
+                    frameBox.appendChild(label);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'ten-frame-grid';
+
+                    // Create 10 cells for each ten-frame
+                    for (let c = 0; c < 10; c++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'ten-frame-cell';
+
+                        if (cellIdGlobal < this.activeA) {
+                            // Populate Pink Group A
+                            cell.classList.add('filled-a');
+                            cell.innerHTML = `<span class="crystal-item">💎</span><span class="cell-number"></span>`;
+                            cell.dataset.activeCrystal = 'true';
+                            cell.dataset.globalIndex = cellIdGlobal;
+                        } else if (cellIdGlobal < this.activeA + this.activeB) {
+                            // Populate Blue Group B
+                            cell.classList.add('filled-b');
+                            cell.innerHTML = `<span class="crystal-item">🔮</span><span class="cell-number"></span>`;
+                            cell.dataset.activeCrystal = 'true';
+                            cell.dataset.globalIndex = cellIdGlobal;
+                        } else {
+                            // Empty cell
+                            cell.dataset.activeCrystal = 'false';
+                        }
+
+                        // Add Tap event listener for active slots
+                        if (cell.dataset.activeCrystal === 'true') {
+                            const index = cellIdGlobal;
+                            cell.onclick = () => this.handleCellTap(cell, index);
+                        }
+
+                        grid.appendChild(cell);
+                        cellIdGlobal++;
+                    }
+
+                    frameBox.appendChild(grid);
+                    container.appendChild(frameBox);
+                }
+
+                this.highlightNextCellToTap();
+            },
+
+            highlightNextCellToTap() {
+                // Clear all chase highlights
+                document.querySelectorAll('.ten-frame-cell').forEach(c => c.classList.remove('next-to-tap'));
+
+                // Find globalIndex equal to this.tappedIndex
+                const cells = document.querySelectorAll('.ten-frame-cell');
+                for (let cell of cells) {
+                    if (parseInt(cell.dataset.globalIndex) === this.tappedIndex) {
+                        cell.classList.add('next-to-tap');
+                        break;
+                    }
+                }
+            },
+
+            handleCellTap(cellElem, index) {
+                // To keep slow learners on track, prevent tapping out of order
+                if (index !== this.tappedIndex) {
+                    // Soft error buzzer
+                    AudioEngine.playError();
+                    return;
+                }
+
+                // Correct sequence tapped!
+                AudioEngine.playCountNode(index);
+                cellElem.classList.remove('next-to-tap');
+                cellElem.classList.add('tapped');
+                
+                // Inject visual count number over the crystal permanent
+                const numSpan = cellElem.querySelector('.cell-number');
+                if (numSpan) numSpan.textContent = index + 1;
+
+                this.tappedIndex++;
+                this.updatePromptUI();
+
+                if (this.tappedIndex < (this.activeA + this.activeB)) {
+                    this.highlightNextCellToTap();
+                } else {
+                    // All crystals successfully counted
+                    AudioEngine.playSuccess();
+                }
+            },
+
+            updatePromptUI() {
+                const dict = translations[this.lang];
+                const total = this.activeA + this.activeB;
+                const prompt = document.getElementById('prompt-txt');
+
+                if (this.tappedIndex < total) {
+                    prompt.textContent = dict.touchPrompt;
+                    prompt.style.color = 'var(--neon-blue)';
+                } else {
+                    prompt.textContent = dict.touchSuccessPrompt;
+                    prompt.style.color = 'var(--neon-green)';
+                }
+            },
+
+            checkLabAns(buttonElem, selectedVal) {
+                const correct = 7;
+                const dict = translations[this.lang];
+                const feedback = document.getElementById('lab-feedback');
+
+                // Clear previous correct/incorrect styles
+                document.querySelectorAll('.btn-opt').forEach(btn => {
+                    btn.classList.remove('correct', 'incorrect');
+                });
+
+                if (selectedVal === correct) {
+                    buttonElem.classList.add('correct');
+                    feedback.textContent = dict.correctFeed;
+                    feedback.style.color = 'var(--neon-green)';
+                    AudioEngine.playSuccess();
+
+                    if (!this.quizXpRewarded) {
+                        this.quizXpRewarded = true;
+                        // Award 10 XP
+                        let xp = parseInt(localStorage.getItem('smartkiddo_xp')) || 25;
+                        xp = Math.min(xp + 10, 100);
+                        localStorage.setItem('smartkiddo_xp', xp);
+                        this.userProfile.xp = xp;
+                        this.updateGamificationUI();
+                    }
+                } else {
+                    buttonElem.classList.add('incorrect');
+                    feedback.textContent = dict.incorrectFeed;
+                    feedback.style.color = 'var(--neon-pink)';
+                    AudioEngine.playError();
+                }
+            },
+
+            goBack() {
+                window.location.href = 'tambah-tahun1.html';
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+</body>
+</html>
