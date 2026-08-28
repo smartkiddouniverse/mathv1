@@ -208,6 +208,7 @@
             box-shadow: 0 5px 15px rgba(255, 42, 133, 0.2);
         }
 
+        /* Formula Card Base */
         .formula-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
@@ -243,6 +244,63 @@
             font-size: 14px;
             line-height: 1.5;
             margin-bottom: 14px;
+        }
+
+        /* Visual Class Hover Customization */
+        .theme-f1 { border-color: var(--neon-pink); }
+        .theme-f1 .formula-icon { background: rgba(255, 42, 133, 0.1); border-color: var(--neon-pink); }
+        .theme-f1 h3 { color: var(--neon-pink); }
+
+        .theme-f2 { border-color: var(--neon-blue); }
+        .theme-f2 .formula-icon { background: rgba(0, 240, 255, 0.1); border-color: var(--neon-blue); }
+        .theme-f2 h3 { color: var(--neon-blue); }
+
+        .theme-f3 { border-color: var(--neon-yellow); }
+        .theme-f3 .formula-icon { background: rgba(255, 223, 0, 0.1); border-color: var(--neon-yellow); }
+        .theme-f3 h3 { color: var(--neon-yellow); }
+
+        /* Enter Class Button Styles */
+        .btn-enter-class {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: auto;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .theme-f1 .btn-enter-class:hover {
+            background: var(--neon-pink);
+            color: white;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+            transform: translateY(-2px);
+        }
+
+        .theme-f2 .btn-enter-class:hover {
+            background: var(--neon-blue);
+            color: #0b001a;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: translateY(-2px);
+        }
+
+        .theme-f3 .btn-enter-class:hover {
+            background: var(--neon-yellow);
+            color: #0b001a;
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 15px var(--neon-yellow);
+            transform: translateY(-2px);
         }
 
         .addition-display {
@@ -405,7 +463,8 @@
 
             <!-- Learn Tab -->
             <div id="tambah-learn-zone">
-                <div class="formula-card">
+                <!-- Formula 1 Card -->
+                <div class="formula-card theme-f1">
                     <div class="formula-header">
                         <div class="formula-icon">🍒</div>
                         <h3 id="f1-title">Formula 1: The Visual Explorer</h3>
@@ -414,9 +473,13 @@
                     <div class="addition-display">
                         <span class="item-group">🍒🍒🍒</span> <span>+</span> <span class="item-group">🍒🍒</span> <span>=</span> <span style="color: var(--neon-pink);">🍒🍒🍒🍒🍒 (5)</span>
                     </div>
+                    <button class="btn-enter-class" onclick="App.enterClass('f1')">
+                        <span class="btn-class-text">Enter Classroom</span> 🚀
+                    </button>
                 </div>
 
-                <div class="formula-card">
+                <!-- Formula 2 Card -->
+                <div class="formula-card theme-f2">
                     <div class="formula-header">
                         <div class="formula-icon">📏</div>
                         <h3 id="f2-title">Formula 2: The Space Jump</h3>
@@ -438,15 +501,22 @@
                             <div class="num-node">10</div>
                         </div>
                     </div>
+                    <button class="btn-enter-class" onclick="App.enterClass('f2')">
+                        <span class="btn-class-text">Enter Classroom</span> 🚀
+                    </button>
                 </div>
 
-                <div class="formula-card">
+                <!-- Formula 3 Card -->
+                <div class="formula-card theme-f3">
                     <div class="formula-header">
                         <div class="formula-icon">🧠</div>
                         <h3 id="f3-title">Formula 3: The Mind Lock Shortcut</h3>
                     </div>
                     <p id="f3-desc">Lock the larger number in your head, then count forward using fingers.</p>
-                    <p style="font-weight:bold; color: var(--neon-yellow);" id="f3-tip"></p>
+                    <p style="font-weight:bold; color: var(--neon-yellow); margin-bottom: 12px;" id="f3-tip"></p>
+                    <button class="btn-enter-class" onclick="App.enterClass('f3')">
+                        <span class="btn-class-text">Enter Classroom</span> 🚀
+                    </button>
                 </div>
             </div>
 
@@ -472,7 +542,6 @@
     </footer>
 
     <script>
-        // Audio synthesizers
         const AudioEngine = {
             ctx: null,
             init() {
@@ -524,7 +593,6 @@
             }
         };
 
-        // Confetti physics engine
         const ConfettiEngine = {
             canvas: null, ctx: null, particles: [], active: false,
             init() {
@@ -591,7 +659,8 @@
                 scoreLabel: "Score: {xp} XP",
                 qCompleteHeader: "Mission Successful! 🌟",
                 qCompleteBody: "You conquered the Addition Cosmic Quiz! Your skills are out of this world.",
-                qCompleteBtn: "Return to Base"
+                qCompleteBtn: "Return to Base",
+                btnEnterClass: "Enter Classroom"
             },
             my: {
                 tambahTitle: "Pangkalan Angkasa Tambah",
@@ -610,7 +679,8 @@
                 scoreLabel: "Skor: {xp} XP",
                 qCompleteHeader: "Misi Berjaya! 🌟",
                 qCompleteBody: "Anda telah menakluki Kuiz Tambah Angkasa! Kepintaran anda luar biasa sekali.",
-                qCompleteBtn: "Kembali ke Pangkalan"
+                qCompleteBtn: "Kembali ke Pangkalan",
+                btnEnterClass: "Masuk Kelas"
             },
             zh: {
                 tambahTitle: "加法空间站 (Tambah)",
@@ -629,7 +699,8 @@
                 scoreLabel: "得分: {xp} XP",
                 qCompleteHeader: "任务圆满完成！🌟",
                 qCompleteBody: "你成功通关了星际加法挑战！你的数学能力简直超乎想象。",
-                qCompleteBtn: "返回基站"
+                qCompleteBtn: "返回基站",
+                btnEnterClass: "进入课堂"
             }
         };
 
@@ -644,8 +715,6 @@
 
             init() {
                 ConfettiEngine.init();
-                
-                // LOAD SHARED DATA FROM LOCALSTORAGE
                 this.lang = localStorage.getItem('smartkiddo_lang') || 'en';
                 this.userProfile.name = localStorage.getItem('smartkiddo_name') || 'Kiddo';
                 this.userProfile.age = parseInt(localStorage.getItem('smartkiddo_age')) || 8;
@@ -682,6 +751,12 @@
                     practiceZone.style.display = 'block';
                     this.initCosmosQuiz();
                 }
+            },
+
+            enterClass(formulaId) {
+                AudioEngine.playSuccess();
+                // Redirects to a dedicated HTML page for each formula
+                window.location.href = `tambah-${formulaId}-kelas.html`;
             },
 
             initCosmosQuiz() {
@@ -798,7 +873,6 @@
             },
 
             rewardXPToProfile() {
-                // Save updated quiz points into local storage, update page, then send back
                 let currentXP = parseInt(localStorage.getItem('smartkiddo_xp')) || 35;
                 currentXP = Math.min(currentXP + this.quizEarnedXP, 100);
                 localStorage.setItem('smartkiddo_xp', currentXP);
@@ -807,7 +881,6 @@
             },
 
             goBackToTopics() {
-                // REDIRECT BACK TO DASHBOARD FILE
                 window.location.href = 'index.html';
             },
 
@@ -825,6 +898,11 @@
                 document.getElementById('f3-desc').textContent = dict.f3Desc;
                 document.getElementById('f3-tip').textContent = dict.f3Tip;
                 document.getElementById('back-topics-txt').textContent = dict.backToTopics;
+
+                // Dynamically update each of the classroom buttons
+                document.querySelectorAll('.btn-class-text').forEach(btn => {
+                    btn.textContent = dict.btnEnterClass;
+                });
             }
         };
 
